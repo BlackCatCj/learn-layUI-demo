@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="resources/layui/css/layui.css" />
+    <link rel="stylesheet" href="css/login-register.css" />
+    <!-- 引入layui的js组件 注意引入layui.js，不要引入layui.all.js,因为太大了，加载慢 -->
+    <script src="resources/layui/layui.js"></script>
+    <!-- <script
+      type="text/javascript"
+      src="js/login-register-js/register.js"
+    ></script> -->
+
+    <!-- 验证码 -->
+    <!-- <script type="text/javascript" src="js/login-register-js/cache.js"></script> -->
+  </head>
+  <body class="loginBody">
+    <form class="layui-form">
+      <div class="login_face">
+        <img
+          src="resources/layui/images/face/1.gif"
+          height="60px"
+          class="userAvatar"
+        />
+      </div>
+      <div>
+        <div class="loginbox-title">登录</div>
+        <!-- <div class="loginbox-social"> -->
+        <div class="social-title">系统</div>
+      </div>
+      <div class="layui-form-item input-item">
+        <label>用户名</label>
+        <!-- lay-verify="required" 表示必填此项 -->
+        <input
+          type="text"
+          placeholder="请输入用户名"
+          autocomplete="off"
+          name="username"
+          class="layui-input"
+          lay-verify="required"
+        />
+      </div>
+      <div class="layui-form-item input-item">
+        <label>密码</label>
+        <input
+          type="password"
+          placeholder="请输入密码"
+          autocomplete="off"
+          name="password"
+          class="layui-input"
+          lay-verify="required"
+        />
+      </div>
+      <div class="layui-form-item input-item" id="imgCode">
+        <input
+          type="text"
+          placeholder="请输入验证码"
+          name="code"
+          autocomplete="off"
+          id="code"
+          class="layui-input"
+        />
+        <img
+          style="margin-right: 20px;"
+          width="100px"
+          id="verify_code_img"
+          height="32"
+          src="/verifyCode/getImg"
+          onclick="javascript:changeImg()"
+        /><br />
+      </div>
+      <div class="layui-form-item">
+        <button class="layui-btn layui-block" lay-filter="login" lay-submit>
+          登录
+        </button>
+      </div>
+      <div class="layui-form-item">
+        <a href="/register/toRegister">还未账户？点击注册</a>
+        <a
+          style="
+            text-decoration: underline;
+            padding-left: 10px;
+            color: #2badce;
+          "
+          href="/"
+          >回首页</a
+        >
+        <!--<input id="butt" type="button" value="注册" /><br><br><br>-->
+      </div>
+    </form>
+  </body>
+</html>

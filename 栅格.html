@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=`, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="resources/layui/css/layui.css" media="all" />
+  </head>
+  <body>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <div class="layui-container">
+      <blockquote class="layui-elem-quote">
+        注意：下述演示中的颜色只是做一个区分作用，并非栅格内置。
+      </blockquote>
+
+      <fieldset
+        class="layui-elem-field layui-field-title"
+        style="margin-top: 20px;"
+      >
+        <legend>始终等比例水平排列</legend>
+      </fieldset>
+
+      <div class="layui-row">
+        <div class="layui-col-xs6">
+          <div class="grid-demo grid-demo-bg1">6/12</div>
+        </div>
+        <div class="layui-col-xs6">
+          <div class="grid-demo">6/12</div>
+        </div>
+      </div>
+      <div class="layui-row">
+        <div class="layui-col-xs3">
+          <div class="grid-demo grid-demo-bg1">3/12</div>
+        </div>
+        <div class="layui-col-xs3">
+          <div class="grid-demo">3/12</div>
+        </div>
+        <div class="layui-col-xs3">
+          <div class="grid-demo grid-demo-bg1">3/12</div>
+        </div>
+        <div class="layui-col-xs3">
+          <div class="grid-demo">3/12</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

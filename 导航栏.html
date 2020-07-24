@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>导航栏</title>
+    <link rel="stylesheet" href="resources/layui/css/layui.css" />
+  </head>
+
+  <body>
+    <!-- 水平导航栏 -->
+    <fieldset
+      class="layui-elem-field layui-field-title"
+      style="margin-top: 30px;"
+    >
+      <legend>水平导航栏</legend>
+    </fieldset>
+    <ul class="layui-nav">
+      <li class="layui-nav-item"><a href="">最新活动</a></li>
+      <!-- layui-this 这个属性指默认选择项，添加上就是设置其为默认选择项 -->
+      <li class="layui-nav-item layui-this">
+        <a href="javascript:;">产品</a>
+        <dl class="layui-nav-child">
+          <!-- 加上<a href="javascript:;">标签，就能让选择后光标移动到对应选择的按钮上 -->
+          <dd><a href="javascript:;">选项1</a></dd>
+          <dd class="layui-this"><a href="">选项2</a></dd>
+          <dd><a href="">选项3</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">大数据</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">解决方案</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">移动模块</a></dd>
+          <dd><a href="">后台模版</a></dd>
+          <dd class="layui-this"><a href="">选中项</a></dd>
+          <dd><a href="">电商平台</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">社区</a></li>
+      <!-- 个人中心 -->
+      <li class="layui-nav-item" lay-unselect="">
+        <a href="javascript:;"
+          ><img src="//t.cn/RCzsdCq" class="layui-nav-img" />我</a
+        >
+        <dl class="layui-nav-child">
+          <dd><a href="javascript:;">修改信息</a></dd>
+          <dd><a href="javascript:;">安全管理</a></dd>
+          <dd><a href="javascript:;">退了</a></dd>
+        </dl>
+      </li>
+    </ul>
+
+    <!-- 垂直导航栏 -->
+    <fieldset
+      class="layui-elem-field layui-field-title"
+      style="margin-top: 30px;"
+    >
+      <legend>垂直导航栏</legend>
+    </fieldset>
+    <ul
+      class="layui-nav layui-nav-tree layui-inline"
+      lay-filter="demo"
+      style="margin-right: 10px;"
+    >
+      <li class="layui-nav-item layui-nav-itemed">
+        <a href="javascript:;">默认展开</a>
+        <dl class="layui-nav-child">
+          <dd><a href="javascript:;">选项一</a></dd>
+          <dd><a href="javascript:;">选项二</a></dd>
+          <dd><a href="javascript:;">选项三</a></dd>
+          <dd><a href="">跳转项</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">解决方案</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">移动模块</a></dd>
+          <dd><a href="">后台模版</a></dd>
+          <dd><a href="">电商平台</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">云市场</a></li>
+      <li class="layui-nav-item"><a href="">社区</a></li>
+    </ul>
+
+    <!-- 引入layui的js组件 注意引入layui.js，不要引入layui.all.js,因为太大了，加载慢 -->
+    <script src="resources/layui/layui.js"></script>
+
+    <script>
+      // 导航栏的jquery
+      //注意：导航栏 依赖 element 模块，否则无法进行功能性操作
+      layui.use("element", function () {});
+    </script>
+  </body>
+</html>

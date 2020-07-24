@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 要使用layui，就要引入其样式 -->
+    <link rel="stylesheet" href="resources/layui/css/layui.css">
+
+</head>
+
+<body>
+
+    <!-- 图标展示 -->
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>图标图案展示</legend>
+    </fieldset>
+    <div>
+
+        <i class="layui-icon layui-icon-face-smile" style="font-size: 30px; color: #1E9FFF;"></i>
+        <div class="layui-icon layui-icon-face-smile" style="font-size: 30px; color: #1E9FFF;"></div>
+        <p class="layui-icon layui-icon-face-smile" style="font-size: 30px; color: #1E9FFF;"></p>
+        <div class="layui-icon layui-icon-light" style="font-size: 30px; color: #1E9FFF;"></div>
+        <div class="layui-icon layui-icon-rss" style="font-size: 30px; color: #1E9FFF;"></div>
+
+    </div>
+
+
+    <!-- 各种按钮展示 -->
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>各种颜色样式的按钮</legend>
+    </fieldset>
+    <div>
+        <button type="button" class="layui-btn layui-btn-primary">原始按钮</button>
+        <button type="button" class="layui-btn">默认按钮</button>
+        <button type="button" class="layui-btn layui-btn-normal">百搭按钮</button>
+        <button type="button" class="layui-btn layui-btn-warm">暖色按钮</button>
+        <button type="button" class="layui-btn layui-btn-danger">警告按钮</button>
+        <button type="button" class="layui-btn layui-btn-disabled">禁用按钮</button>
+        <p>
+            <a href="http://www.layui.com" class="layui-btn">一个可跳转的按钮（a标签）</a>
+        </p>
+    </div>
+
+
+
+    <!-- 不同大小的按钮 -->
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>不同大小的按钮</legend>
+    </fieldset>
+    <div>
+        <button type="button" class="layui-btn layui-btn-lg">大型按钮</button>
+        <button type="button" class="layui-btn">默认按钮</button>
+        <button type="button" class="layui-btn layui-btn-sm">小型按钮</button>
+        <button type="button" class="layui-btn layui-btn-xs">迷你按钮</button>
+
+
+
+    </div>
+
+
+    <!-- 图案按钮 -->
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>图案按钮混搭</legend>
+    </fieldset>
+    <!-- 在按钮的class后加上图标的样式，即可实现图标按钮 -->
+    <p>
+        <button type="button" class="layui-btn layui-btn-lg layui-icon layui-icon-android">大型按钮</button>
+    </p>
+    <!-- 另一种图标按钮的写法 -->
+    <p>
+        <button type="button" class="layui-btn layui-btn-lg">
+            <span class="layui-icon layui-icon-gift"></span>
+            礼物
+        </button>
+    </p>
+
+
+
+    <!-- 有jquery的按钮 -->
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>有jquery的按钮</legend>
+    </fieldset>
+    <div>
+        <button id="add" type="button" class="layui-btn ">增加</button>
+        <button id="update" type="button" class="layui-btn">修改</button>
+        <button id="delete" type="button" class="layui-btn">删除</button>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <!-- 引入layui的js组件 注意引入layui.js，不要引入layui.all.js,因为太大了，加载慢 -->
+    <script src="resources/layui/layui.js"></script>
+
+
+
+    <!-- 响应事件jquery代码 -->
+    <script>
+        // 按钮的jquery
+        layui.use(["jquery"], function () {
+            // 声明$符号，这样才可通过$调用事件
+            var $ = layui.jquery;
+            // 监听id，响应事件
+            $("#add,#update,#delete").click(function () {
+                // 这里的this时dom对象，想要变成jquery对象，需要$(this)这样写
+                // $(this).html()是调用里面的内容，即按钮的字
+                alert($(this).html())
+            })
+        })
+
+
+
+    </script>
+
+
+</body>
+
+</html>
