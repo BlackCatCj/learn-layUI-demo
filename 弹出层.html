@@ -342,10 +342,40 @@
       // 确认框  确认 取消按钮
       // layer.confirm('is not?', { icon: 3, title: '提示' }, function (index) {
       //   //do something
+      //   // 点击确认后的动作是打印，然后关闭，   点击取消不会触发函数，只是关闭而已
       //   console.log(index)
+      //   alert("dksajflka")
       //   layer.close(index);
 
       // });
+
+
+      // layer.confirm('<b>请确保下载后仅用于评审查看，不得将下载内容用于其他任何用途。</b>下载的所有内容，包括文字、图片,均为原创。对未经许可擅自使用者，本司保留追究其法律责任的权利。'
+      //   , { icon: 15, title: '下载声明' }
+      //   , function (index) {
+      //     //do something
+      //     // 点击确认后的动作是打印，然后关闭，   点击取消不会触发函数，只是关闭而已
+
+      //     layer.close(index);
+
+      //   });
+
+
+      layer.confirm('<b>请确保下载后仅用于评审查看，不得将下载内容用于其他任何用途。</b>下载的所有内容，包括文字、图片,均为原创。对未经许可擅自使用者，本司保留追究其法律责任的权利。'
+        // , { icon: 15, title: '下载声明' }
+        // 如果设置标题和图标，则会变成默认的确认按钮，无法使用自定义的btn！
+        , {
+          btn: ['同意', '不同意'],
+          btn1: function () {
+            layer.close(index);
+          },
+          btn2: function () {
+            layer.msg("请先同意下载声明，否则不能进行下载")
+            layer.close(index);
+          }
+
+        });
+
 
 
 
@@ -386,6 +416,12 @@
       //   // 关闭alert
       //   layer.close(index);
       // });
+
+
+
+
+
+
 
 
 
