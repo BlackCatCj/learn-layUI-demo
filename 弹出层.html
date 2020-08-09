@@ -14,6 +14,7 @@
 
 
 
+
   <!-- 点击图片后， 弹出层展示图片
   <div id="layer-photos-demo" class="layer-photos-demo">
     <img layer-pid="可不写" layer-src="img/cup_1.jpg" src="img/cup_1.jpg" alt="图片名">
@@ -334,9 +335,32 @@
 
 
 
-
+  <button class="layui-btn layui-btn-normal" onclick="banquan()">预览附件</button>
 
   <script>
+
+    function banquan() {
+      layui.use("layer", function () {
+        layer.confirm('<b>请确保下载后仅用于评审查看，不得将下载内容用于其他任何用途。</b>下载的所有内容，包括文字、图片,均为原创。对未经许可擅自使用者，本司保留追究其法律责任的权利。'
+          , {
+            btn: ['同意', '不同意'],
+            btn1: function (index) {
+              window.open("https://cn.bing.com/");
+              layer.close(index);
+            },
+            btn2: function (index) {
+              layer.msg("请先同意下载声明，否则不能进行下载")
+              layer.close(index);
+            }
+
+          });
+      })
+    }
+  </script>
+
+  <script>
+
+
     layui.use("layer", function () {
 
       // 确认框  确认 取消按钮
@@ -361,20 +385,27 @@
       //   });
 
 
-      layer.confirm('<b>请确保下载后仅用于评审查看，不得将下载内容用于其他任何用途。</b>下载的所有内容，包括文字、图片,均为原创。对未经许可擅自使用者，本司保留追究其法律责任的权利。'
-        // , { icon: 15, title: '下载声明' }
-        // 如果设置标题和图标，则会变成默认的确认按钮，无法使用自定义的btn！
-        , {
-          btn: ['同意', '不同意'],
-          btn1: function () {
-            layer.close(index);
-          },
-          btn2: function () {
-            layer.msg("请先同意下载声明，否则不能进行下载")
-            layer.close(index);
-          }
 
-        });
+      // 版权声明
+
+      // layer.confirm('<b>请确保下载后仅用于评审查看，不得将下载内容用于其他任何用途。</b>下载的所有内容，包括文字、图片,均为原创。对未经许可擅自使用者，本司保留追究其法律责任的权利。'
+      //   // , { icon: 15, title: '下载声明' }
+      //   // 如果设置标题和图标，则会变成默认的确认按钮，无法使用自定义的btn！
+      //   , {
+      //     btn: ['同意', '不同意'],
+      //     btn1: function (index) {
+      //       return true;
+      //       layer.close(index);
+      //     },
+      //     btn2: function (index) {
+      //       layer.msg("请先同意下载声明，否则不能进行下载")
+      //       return false;
+      //       layer.close(index);
+      //     }
+
+      //   });
+
+
 
 
 
