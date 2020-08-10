@@ -60,6 +60,7 @@
 <body>
     <div class="layui-form-item" style="text-align: center;">
 
+        <!-- 放在form里，这样layui的select才能调用 -->
         <form class="layui-form" style="margin: 20px;">
 
             <!-- 下拉框 -->
@@ -133,7 +134,7 @@
         layui.use('form', function () {
             var form = layui.form;
 
-            //监听下拉框进行班级的创建
+            //监听下拉框进行动态div添加（班级的创建）
             form.on('select(classNumber)', function (data) {
                 document.getElementById('classNum').innerHTML = function () {
                     var arr = [];
