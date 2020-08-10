@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创建班级</title>
+    <link rel="stylesheet" href="./layui/css/layui.css" />
+    <!-- jquery文件必须写在其他js文件之前,否则会报错!! -->
+    <script src="./js/jquery-3.5.1.min.js"></script>
+    <script src="./layui/layui.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .lablecard {
+            /* border: 1px solid red; */
+            margin: 10px;
+            padding-left: 25px;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            flex-direction: row;
+        }
+
+        .row {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            /* border: 1px solid red; */
+        }
+
+        .card {
+            margin: 20px 40px;
+            /* border: 1px solid yellow; */
+
+        }
+
+        .classCard {
+            position: relative;
+            background: #ffffff;
+            border-radius: 3px;
+            padding: 20px;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            -webkit-transition: all 0.3s ease-in-out;
+            -o-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layui-form-item" style="text-align: center;">
+
+        <form class="layui-form" style="margin: 20px;">
+
+
+            <div class="lablecard">
+                <i class="layui-icon layui-icon-add-1" style="font-size: 30px; color: #1E9FFF;"></i>
+                <label class="layui-form-label " style="width: auto; padding: 9px 5px;">添加</label>
+                <div class="layui-input-inline " style="width: 50px;">
+                    <select lay-filter="classNumber">
+                        <option value="1" selected="">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <label class="layui-form-label" style="width: auto; padding: 9px 0px;">类班级</label>
+            </div>
+
+
+            <hr class="layui-bg-blue">
+
+
+            <div class="row" id="classNum">
+
+                <!-- 静态，便于调整样式 -->
+                <div class="layui-col-md3 card" style="width: 400px">
+                    <div class="classCard">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width: auto;">第1类班级类型：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="className" class="layui-input" style="width: 200px">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width: auto;">第1类班级个数：</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="num" class="layui-input" style="width: 200px">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="width: auto;">每个班最大人数：</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="maxNum" class="layui-input" style="width: 200px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="layui-form-item" style="float: left;">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+
+
+
+
+
+
+
+        </form>
+    </div>
+
+
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+
+            //监听下拉框进行班级的创建
+            form.on('select(classNumber)', function (data) {
+                document.getElementById('classNum').innerHTML = function () {
+                    var arr = [];
+                    for (var i = 1; i <= data.value; i++) {
+                        // console.log(i)
+                        arr.push(" <div class=\"layui-col-md3 card\" style=\"width: 400px\">\n" +
+                            "                    <div class=\"classCard\">\n" +
+                            "                        <div class=\"layui-form-item\">\n" +
+                            "                            <label class=\"layui-form-label\" style=\"width: auto;\">第" + i + "类班级类型：</label>\n" +
+                            "                            <div class=\"layui-input-block\">\n" +
+                            "                                <input type=\"text\" name=\"className\" class=\"layui-input\" style=\"width: 200px\">\n" +
+                            "                            </div>\n" +
+                            "                        </div>\n" +
+                            "                        <div class=\"layui-form-item\">\n" +
+                            "                            <label class=\"layui-form-label\" style=\"width: auto;\">第" + i + "类班级个数：</label>\n" +
+                            "                            <div class=\"layui-input-block\">\n" +
+                            "                                <input type=\"number\" name=\"num\" class=\"layui-input\" style=\"width: 200px\">\n" +
+                            "                            </div>\n" +
+                            "                        </div>\n" +
+                            "                        <div class=\"layui-form-item\">\n" +
+                            "                            <label class=\"layui-form-label\" style=\"width: auto;\">每个班最大人数：</label>\n" +
+                            "                            <div class=\"layui-input-block\">\n" +
+                            "                                <input type=\"number\" name=\"maxNum\" class=\"layui-input\" style=\"width: 200px\">\n" +
+                            "                            </div>\n" +
+                            "                        </div>\n" +
+                            "                    </div>\n" +
+                            "                </div>");
+                    }
+                    return arr.join('');
+                }();
+            })
+
+
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                layer.msg(JSON.stringify(data.field));
+                console.log(data)
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>
