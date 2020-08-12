@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分班</title>
+    <link rel="stylesheet" href="./resources/layui/css/layui.css" />
+    <!-- jquery文件必须写在其他js文件之前,否则会报错!! -->
+    <!-- <script src="./js/jquery-3.5.1.min.js"></script> -->
+    <script src="./resources/layui/layui.js"></script>
+
+    <!-- 多选下拉框所需js -->
+    <script src="./resources/layui/xm-select.js"></script>
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* width: 100%; */
+            display: flex;
+            /* justify-content: center; */
+            /* align-items: center; */
+            flex-direction: column;
+            font-weight: 600;
+        }
+
+        .Card {
+            /* height: 80px; */
+            /* width: 80%; */
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            /* border: 1px solid red; */
+            position: relative;
+            background: #ffffff;
+            border-radius: 3px;
+            padding: 20px;
+            margin: 20px;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            -webkit-transition: all 0.3s ease-in-out;
+            -o-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+        }
+
+
+        .card {
+            /* border: 1px solid red; */
+            margin: 20px;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <div class="Card">
+
+                <label class="layui-form-label " style="width: auto;">请选择班级类型：</label>
+                <div class="layui-input-inline " style="width: 80px;">
+                    <select name="班级类型">
+                        <option value="创新" selected="">创新</option>
+                        <option value="实验">实验</option>
+                    </select>
+                </div>
+
+                <label class="layui-form-label " style="width: auto;">请选择分班方式：</label>
+                <div class="layui-input-inline " style="width: 80px;">
+                    <select name="分班方式">
+                        <option value="成绩" selected="">成绩</option>
+                        <option value="随机">随机</option>
+                    </select>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="Card">
+
+                <label class="layui-form-label " style="width: auto;">请选择学生类型（可多选）</label>
+                <div id="demo1" class="layui-input-inline " style="width: 300px;"></div>
+            </div>
+
+        </div>
+
+
+
+    </form>
+
+    <div class="Card">
+        <div class="layui-card">
+            <div class="card">
+                <hr class="layui-bg-blue">
+                <div class="layui-card-header" style="text-align: center;">未分</div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="waiteTable"></table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card">
+            <div class="card">
+                <hr class="layui-bg-blue">
+                <div class="layui-card-header" style="text-align: center;">已分</div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="alreadyTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+
+
+        layui.use(['form', 'table'], function () {
+            var form = layui.form;
+            var table = layui.table;
+
+            //渲染多选下拉框  静态数据
+            // var demo1 = xmSelect.render({
+            //     el: '#demo1',
+            //     style: {
+            //         borderRadius: '20px',
+            //     },
+            //     name: '学生类型',
+            //     data: [
+            //         { name: '保送', value: '保送' },
+            //         { name: '普通', value: '普通', selected: true },
+            //         { name: '体育', value: '体育' },
+            //     ],
+            //     theme: {
+            //         color: '#0081ff',
+            //     }
+            // })
+
+            //渲染多选下拉框  动态获取后台数据
+            var demo1 = xmSelect.render({
+                el: '#demo1',
+                toolbar: { show: true },
+                style: {
+                    borderRadius: '20px',
+                },
+                name: '学生类型',
+                theme: {
+                    color: '#0081ff',
+                },
+                data: []
+            })
+
+            $.ajax({
+                url: "./json/select.json",
+                type: "GET",
+                datatype: "json",
+                success: function (data) {
+
+                    console.log(data)
+
+                    demo1.update({
+                        data: data.data,
+                        autoRow: true,
+                    })
+
+                }
+            });
+
+
+
+
+
+            // 已分 表格
+            table.render({
+                elem: '#waiteTable'
+                // ajax请求的后端接口
+                , url: ''
+                , cols: [[
+                    { field: 'tiyu', title: '体育', align: 'center' }
+                    , { field: 'boasong', title: '保送', align: 'center' }
+                    , { fixed: 'putong', title: '普通', align: 'center' }
+                ]]
+                , parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.code == 200 ? 0 : -100, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.total, //解析数据长度
+                        "data": res.data.records //解析数据列表
+                    };
+                }
+            });
+
+            // 未分 表格
+            table.render({
+                elem: '#alreadyTable'
+                // ajax请求的后端接口
+                , url: ''
+                // field: 'tiyu'   tiyu是后端传回来的data数据的名称，自行更换即可
+                , cols: [[
+                    { field: 'tiyu', title: '体育', align: 'center' }
+                    , { field: 'boasong', title: '保送', align: 'center' }
+                    , { fixed: 'putong', title: '普通', align: 'center' }
+                ]]
+                , parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.code == 200 ? 0 : -100, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.total, //解析数据长度
+                        "data": res.data.records //解析数据列表
+                    };
+                }
+            });
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                layer.msg(JSON.stringify(data.field));
+                console.log(data);
+                return false;
+            });
+        })
+    </script>
+</body>
+
+</html>

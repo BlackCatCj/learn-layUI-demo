@@ -1,0 +1,25 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": [
+    {
+      "value": "15970745140400",
+      "name": "临沧市",
+      "selected": true
+    },
+    {
+      "value": "15970745140401",
+      "name": "重庆市"
+    },
+    {
+      "value": "15970745140402",
+      "name": "晋城市",
+      "disabled": true
+    },
+    {
+      "value": "15970745140403",
+      "name": "宜兰县",
+      "selected": true
+    }
+  ]
+}
