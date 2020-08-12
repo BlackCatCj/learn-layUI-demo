@@ -161,7 +161,7 @@
                 },
                 data: []
             })
-
+            // 通过ajax获取后台数据
             $.ajax({
                 url: "./json/select.json",
                 type: "GET",
@@ -169,7 +169,7 @@
                 success: function (data) {
 
                     console.log(data)
-
+                    // 将数据传给多选下拉框，更新下拉框数据
                     demo1.update({
                         data: data.data,
                         autoRow: true,
