@@ -289,6 +289,7 @@
 
                     json = JSON.stringify(data);
                     layer.open({
+                        // type设置为1，才不会因为子页面的表单验证而被layer.msg覆盖掉弹窗，否则会被直接关闭掉弹窗
                         type: 1
                         , title: '<i class="layui-icon layui-icon-survey" style="font-size: 18px; color: #1E9FFF;"><b>编辑信息</b> </i>'
                         , area: ['450px', '600px']
