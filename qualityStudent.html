@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+    <link rel="stylesheet" href="./resources/layui/css/layui.css" />
+    <!-- jquery文件必须写在其他js文件之前,否则会报错!! -->
+    <!-- <script src="./js/jquery-3.5.1.min.js"></script> -->
+    <script src="./resources/layui/layui.js"></script>
+
+
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .btn-set {
+            float: right;
+            margin-right: 10px;
+        }
+
+        .layui-card label {
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon">&#xe624;</i> 添加</button>
+        <!--<button class="layui-btn layui-btn-sm" lay-event="back">返回</button>-->
+    </div>
+</script>
+
+
+    <table class="layui-hide" id="qualityStudents" lay-filter="demo"></table>
+
+
+
+
+
+    <script type="text/html" id="demo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>-->
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+</script>
+
+    <script>
+
+        function getQueryString(name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null;
+        }
+        var classId = getQueryString("classId");
+
+        var json;
+        layui.use(['table', 'upload', 'form'], function () {
+
+            var table = layui.table;
+            var form = layui.form;
+            var upload = layui.upload;
+
+            table.render({
+                elem: '#qualityStudents'
+                // , url: '/qualityStudents/getQualityStudent/simingG'
+                , url: 'json/users2.json'
+                , cellMinWidth: 80 //全局定义常规单元格的最小宽度
+                , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                    , curr: 1 //设定初始在第 1 页
+                    , groups: 10 //只显示 1 个连续页码
+                    , first: false //不显示首页
+                    , last: false //不显示尾页
+                    , limit: 10
+
+                }
+                , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                , cols: [[
+                    { field: 'id', title: 'ID', sort: true }
+                    , { field: 'name', title: '姓名' }
+                    , { field: 'sex', title: '性别' }
+                    , { field: 'idCard', title: '身份证' }
+                    , { field: 'school', title: '毕业中学' }
+                    , { field: 'ranking', title: '市排名' }
+                    , { field: 'phone', title: '电话' }
+                    , { field: 'promise', title: '承诺' }
+                    , { field: 'remark', title: '备注' }
+                    , { fixed: 'right', title: '操作', width: 178, align: 'center', toolbar: '#demo' }
+                ]]
+                , id: 'qualityStudents'
+            });
+
+
+
+
+            //头工具栏事件
+            table.on('toolbar(demo)', function (obj) {
+                switch (obj.event) {
+                    case 'add':
+                        layer.open({
+                            type: 1
+                            , content: '<div class="layui-card">\n' +
+                                '        <div class="layui-card-body">\n' +
+                                '            <form class="layui-form" id="form-all" id="forms">\n' +
+                                '<input hidden name="belonging" value="simingG">' +
+                                '                <div class="layui-form-item">\n' +
+                                '                    <label class="layui-form-label">姓名:<span style="color: red;">*</span></label>\n' +
+                                '                    <div class="layui-input-block">\n' +
+                                '                        <input type="text" name="name" required lay-verify="required" placeholder="name" autocomplete="off"\n' +
+                                '                            class="layui-input">\n' +
+                                '                    </div>\n' +
+                                '                </div>\n' +
+                                '\n' +
+                                '                <div class="layui-form-item">\n' +
+                                '                    <label class="layui-form-label">性别:<span style="color: red;">*</span></label>\n' +
+                                '                    <div class="layui-input-block">\n' +
+                                '                        <input type="radio" name="sex" value="男" title="男">\n' +
+                                '                        <input type="radio" name="sex" value="女" title="女" checked>\n' +
+                                '                    </div>\n' +
+                                '                </div>\n' +
+                                '\n' +
+                                '                <div class="layui-form-item">\n' +
+                                '                    <label class="layui-form-label">身份证:</label>\n' +
+                                '                    <div class="layui-input-block">\n' +
+                                '                        <input type="text" name="idCard" placeholder="IdCard" autocomplete="off" class="layui-input">\n' +
+                                '                    </div>\n' +
+                                '                </div>\n' +
+                                '\n' +
+                                '\n' +
+                                '                <div class="layui-form-item">\n' +
+                                '                    <label class="layui-form-label">学校:<span style="color: red;">*</span></label>\n' +
+                                '                    <div class="layui-input-block">\n' +
+                                '                        <input type="text" name="school" required lay-verify="required" placeholder="School"\n' +
+                                '                            autocomplete="off" class="layui-input">\n' +
+                                '                    </div>\n' +
+                                '                </div>\n' +
+                                '                <div class="layui-form-item">\n' +
+                                '                    <label class="layui-form-label">市排名:<span style="color: red;">*</span></label>\n' +
+                                '                    <div class="layui-input-block">\n' +
+                                '                        <input type="text" name="ranking" required lay-verify="ranking" placeholder="Ranking"\n' +
+                                '                            autocomplete="off" class="layui-input">\n' +
+                                '                    </div>\n' +
+                                '                </div>\n' +
+                                '                <div class="layui-form-item">\n' +
+                                '                    <label class="layui-form-label">监护人电话:<span style="color: red;">*</span></label>\n' +
+                                '                    <div class="layui-input-block">\n' +
+                                '                        <input type="text" name="phone" required lay-verify="phone" placeholder="Phone"\n' +
+                                '                            autocomplete="off" class="layui-input">\n' +
+                                '                    </div>\n' +
+                                '                </div>\n' +
+                                '\n' +
+                                '                <div class="layui-form-item">\n' +
+                                '                    <label class="layui-form-label">承诺:</label>\n' +
+                                '                    <div class="layui-input-block">\n' +
+                                '                        <input type="text" name="promise" placeholder="Promise"\n' +
+                                '                            autocomplete="off" class="layui-input">\n' +
+                                '                    </div>\n' +
+                                '                </div>\n' +
+                                '\n' +
+                                '                <div class="layui-form-item">\n' +
+                                '                    <label class="layui-form-label">备注:</label>\n' +
+                                '                    <div class="layui-input-block">\n' +
+                                '                        <input type="text" name="remark" placeholder="Remark"\n' +
+                                '                            autocomplete="off" class="layui-input">\n' +
+                                '                    </div>\n' +
+                                '                </div>\n' +
+                                '\n' +
+                                '            </form>\n' +
+                                '        </div>\n' +
+                                '    </div> '
+                            , title: '<i class="layui-icon layui-icon-add-1" style="font-size: 18px; color: #1E9FFF;"><b>添加优质生</b> </i>'
+                            , area: ['450px', '560px']
+                            , btn: ['提交', '取消']
+                            , btnAlign: 'r'
+                            // c 居中 l 左对齐 r 右对齐（默认）
+                            // 提交按钮函数
+
+                            , yes: function (index, layero) {
+                                // ajax部分
+
+                                form.on('submit(formDemo)', function (data) {
+                                    // console.log(data)
+                                    $.ajax({
+                                        type: 'post',
+                                        // 接口
+                                        url: '/qualityStudents/addQualityStudent',
+                                        contentType: "application/json; charset=utf-8",
+                                        data: JSON.stringify(data.field),
+                                        success: function (data) {
+                                            layer.msg("添加成功", {
+                                                icon: 1,
+                                                time: 2000 //2秒后执行表格刷新
+                                            }, function () {
+
+                                                // 刷新表格
+                                                table.reload('qualityStudents', {
+                                                    url: '/qualityStudents/getQualityStudent/simingG'
+                                                });
+                                                // 关闭弹窗
+                                                layer.close(index)
+                                            });
+                                        },
+
+                                    });
+
+
+                                })
+
+                            }
+                            , btn2: function (index, layero) {
+
+                                // 关闭弹窗
+                                layer.close(index)
+                                //return false 开启该代码可禁止点击该按钮关闭
+                            }
+                            , closeBtn: 2
+                            // 右上角的叉叉按钮样式 0-2
+                            // 两种风格的关闭按钮，可通过配置1和2来展示，如果不显示，则closeBtn: 0
+
+                            , shade: [0.8, '#393D49']
+
+                            , success: function (layero, index) {
+
+                                layero.addClass('layui-form');
+                                // 将确认按钮改变成提交按钮
+                                layero.find('.layui-layer-btn0').attr({
+                                    'lay-filter': 'formDemo',
+                                    'lay-submit': ''
+                                });
+                                form.render();
+                                // 必须重载表单，否则单选框（性别）显示不了
+                                // form.render('radio')
+                            }
+
+                        });
+                        break;
+                    case 'back':
+                        // 跳转回某个页面
+                        location.href = "#";
+                        break;
+
+                };
+            });
+
+
+
+
+
+            //自定义验证规则
+            form.verify({
+
+                phone: [
+                    /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/,
+                    "您的输入有误，请重新输入(中国11位手机号)",
+                ],
+                ranking: [
+                    /^[1-9]+\d*$/,
+                    "请输入不为0的正整数",
+                ],
+
+
+            });
+
+            // 右侧工具栏-编辑
+            table.on('tool(demo)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data //获得当前行数据（json格式的键值对）
+                    , layEvent = obj.event //获得 lay-event 对应的值（编辑、删除、添加）
+
+                // console.log("当前行data")
+                // console.log(data)
+
+                if (layEvent === 'edit') {
+
+                    json = JSON.stringify(data);
+                    layer.open({
+                        type: 1
+                        , title: '<i class="layui-icon layui-icon-survey" style="font-size: 18px; color: #1E9FFF;"><b>编辑信息</b> </i>'
+                        , area: ['450px', '600px']
+                        , btn: ['提交', '取消']
+                        , btnAlign: 'r'
+
+                        , content: '<div class="center">\n' +
+                            '        <form class="layui-form layui-form-pane" action=""  lay-filter="formTest">\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">ID</label>\n' +
+                            '                <div class="layui-input-inline">\n' +
+                            '                    <input type="text" name="id"  readonly autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">姓名</label>\n' +
+                            '                <div class="layui-input-inline">\n' +
+                            '                    <input type="text" name="name" autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">性别:</label>\n' +
+                            '                <div class="layui-input-block">\n' +
+                            '                    <input type="radio" name="sex" value="男" title="男">\n' +
+                            '                    <input type="radio" name="sex" value="女" title="女">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">身份证</label>\n' +
+                            '                <div class="layui-input-inline">\n' +
+                            '                    <input type="text" name="idCard" autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">毕业中学</label>\n' +
+                            '                <div class="layui-input-inline">\n' +
+                            '                    <input type="text" name="school" autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">市排名</label>\n' +
+                            '                <div class="layui-input-inline">\n' +
+                            '                    <input type="number" name="ranking" autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">监护人电话</label>\n' +
+                            '                <div class="layui-input-inline">\n' +
+                            '                    <input type="text" name="phone" lay-verify="required" autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">承诺</label>\n' +
+                            '                <div class="layui-input-inline">\n' +
+                            '                    <input type="text" name="promise" autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">备注</label>\n' +
+                            '                <div class="layui-input-inline">\n' +
+                            '                    <input type="text" name="remark" autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '\n' +
+                            '\n' +
+                            '        </form>\n' +
+                            '    </div>'
+
+                        , yes: function (index, layero) {
+
+                            form.on('submit(formDemo)', function (data) {
+                                // console.log(data)
+                                $.ajax({
+                                    type: 'post',
+                                    // 接口
+                                    url: '/qualityStudents/updateQualityStudent',
+                                    //服务器返回的数据类型
+                                    dataType: 'json',
+                                    //发送到服务器的数据，对象必须为key/value的格式，jquery会自动转换为字符串格式
+                                    data: JSON.stringify(data.field),
+                                    success: function (data) {
+                                        layer.msg("添加成功", {
+                                            icon: 1,
+                                            time: 2000 //2秒后执行表格刷新
+                                        }, function () {
+
+                                            // 刷新表格
+                                            table.reload('qualityStudents', {
+                                                url: '/qualityStudents/getQualityStudent/simingG'
+                                            });
+                                            // 关闭弹窗
+                                            layer.close(index)
+                                        });
+                                    },
+                                    error: function (jqXHR) {
+                                        //请求失败函数内容
+                                    }
+                                });
+
+
+                            })
+
+                        }
+                        , btn2: function (index, layero) {
+                            // 关闭弹窗
+                            layer.close(index)
+                            //return false 开启该代码可禁止点击该按钮关闭
+                        }
+                        , closeBtn: 2
+                        // 右上角的叉叉按钮样式 0-2
+                        // 两种风格的关闭按钮，可通过配置1和2来展示，如果不显示，则closeBtn: 0
+
+                        , shade: [0.8, '#393D49']
+
+                        , success: function (layero, index) {
+
+                            var parent_json = eval('(' + parent.json + ')');
+                            console.log(parent_json);
+                            // 通过子页面的form标签进行数据的一次性填入
+                            form.val("formTest", parent_json);
+
+                            // 因为不通过form里的按钮进行提交，所以必须进行设置，将弹出层的按钮转换成表单的提交按钮
+                            layero.addClass('layui-form');
+                            // 将确认按钮改变成提交按钮
+                            layero.find('.layui-layer-btn0').attr({
+                                'lay-filter': 'formDemo',
+                                'lay-submit': ''
+                            });
+                            // 重载表单，否则无法应用
+                            form.render();
+                        }
+                    });
+                }
+            });
+
+
+
+
+        });
+
+        function exportExcel() {
+            window.location.href = "/downloadBlankExcel?belonging=SimingG";
+            // $.post("/downloadBlankExcel",{"belonging": "SimingG"},function () {
+            //     layer.msg("ok");
+            // })
+        }
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
