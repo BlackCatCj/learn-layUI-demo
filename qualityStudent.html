@@ -114,6 +114,7 @@
                 switch (obj.event) {
                     case 'add':
                         layer.open({
+                            // type设置为1，才不会因为子页面的表单验证而被layer.msg覆盖掉弹窗，否则会被直接关闭掉弹窗
                             type: 1
                             , content: '<div class="layui-card">\n' +
                                 '        <div class="layui-card-body">\n' +
@@ -261,7 +262,8 @@
 
 
 
-
+            // 添加了子页面的表单验证，需要注意：子页面必须设置  type：1  
+            // 否则在验证表单的时候，因为会有layer.msg弹窗，会覆盖掉子页面，只有type:1 才可以保证不被覆盖掉
             //自定义验证规则
             form.verify({
 
