@@ -240,7 +240,7 @@
                             // 从父页面获取行数据
                             var parent_json = JSON.parse(parent.json);
                             console.log(parent_json);
-                            // 不屑parent一样能获取到，因为都写在一个页面里了
+                            // 不写parent一样能获取到，因为都写在一个页面里了
                             // var parent_json = JSON.parse(json);
                             // console.log(json);
 
@@ -254,7 +254,7 @@
                                 'lay-filter': 'formDemo',
                                 'lay-submit': ''
                             });
-
+                            // 在弹窗加载完成后，进行下拉框的加载
                             // 加载下拉框
                             $.get("./json/select.json", function (result) {
                                 var classesEl = $('#classes');
