@@ -261,6 +261,7 @@
                                 $.each(result["data"], function (index, item) {
                                     classesEl.append(new Option(item.name, item.id));// 下拉菜单里添加元素
                                 });
+                                // 下拉框加载数据后要进行下拉框的重载，否则没法出现选项
                                 form.render("select");
                             })
 
