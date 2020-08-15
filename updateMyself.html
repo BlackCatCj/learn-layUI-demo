@@ -133,7 +133,9 @@
 					contentType: "application/json; charset=utf-8",
 					data: JSON.stringify(data.field),
 					success: function (data) {
+						//  shift: -1, msg的动画效果设置为没有
 						layer.msg("修改成功", { shift: -1, time: 1000 }, function () {
+							// 1s后跳转页面
 							location.href = "/";
 						});
 					}
