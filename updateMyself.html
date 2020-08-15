@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Layui</title>
+	<title>修改个人信息</title>
 	<link rel="stylesheet" href="./resources/layui/css/layui.css" />
 	<link rel="stylesheet" href="../css/footer.css" />
 	<script src="./js/login-register-js/jquery-3.5.1.min.js"></script>
@@ -53,6 +53,7 @@
 						<div class="layui-input-block my-input-block">
 							<input type="text" name="username" autocomplete="off" class="layui-input"
 								readonly="readonly" placeholder="用户名">
+							<!-- readonly="readonly" 将用户名设置为不可修改 -->
 						</div>
 					</div>
 					<div class="layui-form-item">
@@ -109,14 +110,18 @@
 			var layer = layui.layer,
 				laydate = layui.laydate,
 				form = layui.form;
+
+			// 加载日期选择器
 			laydate.render({
 				elem: '#birthday'
 			});
+
 			$.ajax({
 				type: 'get',
 				url: '/users/current',
 				async: false,
 				success: function (data) {
+					// 通过后端获取的数据进行表单的填充
 					form.val("formUpdate", data);
 				}
 			});
