@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="./resources/layui/css/layui.css" />
+    <!-- jquery文件必须写在其他js文件之前,否则会报错!! -->
+    <!-- <script src="./js/jquery-3.5.1.min.js"></script> -->
+    <script src="./resources/layui/layui.js"></script>
+
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .btn-set {
+            float: right;
+            margin-right: 10px;
+        }
+
+        .layui-card label {
+            font-weight: 500;
+        }
+
+        .upbtn {
+            margin-top: 15px;
+            margin-left: 15px;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+        }
+
+
+        .demoTable {
+            margin-left: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="upbtn">
+        <div class="layui-upload">
+            <button type="button" class="layui-btn" id="import"><i class="layui-icon">&#xe67c;</i>导入</button>
+            <button type="button" class="layui-btn" onclick="importQualityStudent() "><i
+                    class="layui-icon">&#xe67c;</i>导入优质生</button>
+            <button type="button" class="layui-btn layui-btn-danger" id="delete" onclick="deleteAll()"><i
+                    class="layui-icon">&#xe640;</i>清空</button>
+            <button type="button" class="layui-btn layui-btn-normal" id="download" onclick="downloadBlankExcel()"><i
+                    class="layui-icon">&#xe601;</i>空表下载</button>
+        </div>
+
+
+        <div class="demoTable">
+            搜索ID：
+            <div class="layui-inline">
+                <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+            </div>
+            <button class="layui-btn" data-type="reload">搜索</button>
+        </div>
+
+    </div>
+
+
+
+    <table class="layui-hide" id="roster" lay-filter="demo"></table>
+
+
+
+
+    <script type="text/html" id="demo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    </script>
+
+    <script>
+
+        layui.use(['table', 'upload'], function () {
+            var table = layui.table;
+            var upload = layui.upload;
+            var form = layui.form;
+            var json;
+            table.render({
+                elem: '#roster'
+                , url: 'json/users2.json'
+                , cellMinWidth: 80 //全局定义常规单元格的最小宽度
+                , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                    , curr: 1 //设定初始在第 1 页
+                    , groups: 10 //只显示 1 个连续页码
+                    , first: false //不显示首页
+                    , last: false //不显示尾页
+                    , limit: 10
+
+                }
+                , cols: [[
+                    { field: 'id', title: 'ID', sort: true }
+                    , { field: 'name', title: '姓名' }
+                    , { field: 'idCard', title: '身份证' }
+                    , { field: 'sex', title: '性别' }
+                    , { field: 'totalGrade', title: '投档分' }
+                    , { field: 'type', title: '学生类型' }
+                    , { field: 'nation', title: '民族' }
+                    , { field: 'native_place', title: '籍贯' }
+                    , { field: 'patriarch', title: '监护人' }
+                    , { field: 'phone', title: '监护人电话' }
+                    , { field: 'address', title: '家庭地址' }
+                    , { field: 'priority', title: '优先级', hide: true }
+                    , { field: 'studentCode', title: '学籍号' }
+                    , { field: 'schoolRollType', title: '学籍类型' }
+                    , { field: 'selfPhone', title: '联系电话' }
+                    , { field: 'ranking', title: '市排名' }
+                    , { field: 'registerCode', title: '报名号' }
+                    , { fixed: 'right', title: '操作', width: 178, align: 'center', toolbar: '#demo' }
+                ]]
+                , id: 'roster'
+
+                // 对某些数据行进行颜色标明
+                , done: function (res, curr, count) {
+                    $('th').css({ 'font-size': '18px', 'color': 'black' })//表头样式
+                    for (var i in res.data) {
+                        var priorityTD = res.data[i];
+                        if (priorityTD.priority === 1) {
+                            $("tr[data-index='" + i + "']").attr({ "style": "background:#FF8888 ", "font-weight": "bold" })
+                        }
+                        // 隐藏某行
+                        // if (priorityTD.id === "1") {
+                        //     $("tr[data-index='" + i + "']").attr({ "style": "display:none " })
+                        // }
+                    }
+                }
+            });
+
+
+
+            /*!查询框进行表格重载的方法：1*/
+            var $ = layui.$, active = {
+                reload: function () {
+                    var demoReload = $('#demoReload');
+                    table.reload('roster', {
+                        url: '#',  //这个接口要后端写好查询语句，根据where返回的username进行查询并返回数据
+                        method: 'get',
+                        page: {
+                            curr: 1 //重新从第 1 页开始
+                        },
+                        where: {
+                            username: demoReload.val()
+
+                        }
+
+                    }, 'data')
+
+
+                }
+
+            }
+            $('.demoTable .layui-btn').on('click', function () {
+                var type = $(this).data('type');
+
+                if ($('#demoReload').val() == "") {
+                    layer.msg('查询项目不能为空');
+                    return false;
+                }
+                active[type] ? active[type].call(this) : '';
+            });
+
+
+            // 查询框进行表格重载的方法：2 这种方法更简单些
+
+            // $('.demoTable .layui-btn').on('click', function () {
+            //     if ($('#demoReload').val() == "") {
+            //         layer.msg('查询项目不能为空');
+            //         return false;
+            //     }
+
+            //     reloadTable();
+
+            // });
+            // function reloadTable() {
+            //     table.reload('testReload', {
+            //         url: '#',  //这个接口要后端写好查询语句，根据where返回的username进行查询并返回数据
+            //         where: { "username": $('#demoReload').val() }
+            //     });
+            // }
+
+
+
+
+            upload.render({
+                elem: '#import'
+                , url: '/importFile/0' //改成您自己的上传接口
+                , data: {
+                    "belonging": "SimingG"
+                }
+                , accept: 'file'
+                , done: function (res) {
+                    table.reload('roster', {
+                        url: '/getAllStudents/simingG'
+                    });
+                }
+            });
+
+            // 右侧工具栏-编辑
+            table.on('tool(demo)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data //获得当前行数据（json格式的键值对）
+                    , layEvent = obj.event //获得 lay-event 对应的值（编辑、删除、添加）
+
+                // console.log("当前行data")
+                // console.log(data)
+
+                if (layEvent === 'edit') {
+
+                    json = JSON.stringify(data);
+                    // 其实不转成字符串也可以 如： json = data; 这样子页面接收时都不用转回对象了，直接用就行
+                    console.log(json)
+
+                    layer.open({
+                        type: 1
+                        , title: '<i class="layui-icon layui-icon-survey" style="font-size: 18px; color: #1E9FFF;"><b>编辑信息</b> </i>'
+                        , area: ['450px', '350px']
+                        , btn: ['提交', '取消']
+                        , btnAlign: 'r'
+
+                        , content: '<div class="center">\n' +
+                            '        <form class="layui-form layui-form-pane" action=""  lay-filter="formTest">\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">姓名</label>\n' +
+                            '                <div class="layui-input-inline">\n' +
+                            '                    <input type="text" name="name" autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">性别:</label>\n' +
+                            '                <div class="layui-input-block">\n' +
+                            '                    <input type="radio" name="sex" value="男" title="男">\n' +
+                            '                    <input type="radio" name="sex" value="女" title="女">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">学生类型</label>\n' +
+                            '                <div class="layui-input-inline">\n' +
+                            '                    <input type="text" name="type" autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">监护人</label>\n' +
+                            '                <div class="layui-input-inline">\n' +
+                            '                    <input type="text" name="patriarch" autocomplete="off" class="layui-input">\n' +
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '        </form>\n' +
+                            '    </div>'
+
+                        , yes: function (index, layero) {
+
+                            form.on('submit(formDemo)', function (data) {
+                                // console.log(data)
+                                $.ajax({
+                                    type: 'post',
+                                    // 接口
+                                    url: '/qualityStudents/updateQualityStudent',
+                                    //服务器返回的数据类型
+                                    dataType: 'json',
+                                    //发送到服务器的数据，对象必须为key/value的格式，jquery会自动转换为字符串格式
+                                    data: JSON.stringify(data.field),
+                                    success: function (data) {
+                                        layer.msg("添加成功", {
+                                            icon: 1,
+                                            time: 2000 //2秒后执行表格刷新
+                                        }, function () {
+
+                                            // 刷新表格
+                                            table.reload('qualityStudents', {
+                                                url: '/qualityStudents/getQualityStudent/simingG'
+                                            });
+                                            // 关闭弹窗
+                                            layer.close(index)
+                                        });
+                                    },
+                                    error: function (jqXHR) {
+                                        //请求失败函数内容
+                                    }
+                                });
+
+
+                            })
+
+                        }
+                        , btn2: function (index, layero) {
+                            // 关闭弹窗
+                            layer.close(index)
+                            //return false 开启该代码可禁止点击该按钮关闭
+                        }
+                        , closeBtn: 2
+                        // 右上角的叉叉按钮样式 0-2
+                        // 两种风格的关闭按钮，可通过配置1和2来展示，如果不显示，则closeBtn: 0
+
+                        , shade: [0.8, '#393D49']
+
+                        , success: function (layero, index) {
+                            // 从父页面获取行数据
+                            // parent.json  parent是父页面  json是在一开始就定义的一个父页面的全局变量
+                            // parent.json 是一个字符串 因为父页面保存的时候通过JSON.stringify转成字符串了
+                            // 再通过JSON.parse转回对象就行了
+                            var parent_json = JSON.parse(parent.json);
+                            console.log(parent_json);
+
+                            // 通过子页面的form标签进行数据的一次性填入
+                            form.val("formTest", parent_json);
+
+                            // 因为不通过form里的按钮进行提交，所以必须进行设置，将弹出层的按钮转换成表单的提交按钮
+                            layero.addClass('layui-form');
+                            // 将确认按钮改变成提交按钮
+                            layero.find('.layui-layer-btn0').attr({
+                                'lay-filter': 'formDemo',
+                                'lay-submit': ''
+                            });
+                            // 重载表单，否则无法应用
+                            form.render();
+                        }
+                    });
+                }
+            });
+
+
+        });
+
+        function deleteAll() {
+
+            layer.confirm('确认删除所有学生?', function (index) {
+                layui.use(['table', 'upload'], function () {
+                    var table = layui.table;
+                    $.post("/deleteAll/simingG", function () {
+                        table.reload('roster', {
+                            url: '/getAllStudents/simingG'
+                        });
+                    })
+                });
+                layer.close(index);
+            });
+        }
+
+        function downloadBlankExcel() {
+            window.location.href = "/downloadBlankExcel?belonging=SimingG";
+            // $.post("/downloadBlankExcel",{"belonging": "SimingG"},function () {
+            //     layer.msg("ok");
+            // })
+        }
+
+        function importQualityStudent() {
+            $.post("/importQualityStudent/simingG", function (result) {
+                if (result.code == 0) {
+                    layer.msg('导入成功')
+                }
+            })
+        }
+    </script>
+
+</body>
+
+</html>
