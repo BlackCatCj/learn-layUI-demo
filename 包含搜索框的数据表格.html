@@ -45,6 +45,7 @@
 </head>
 
 <body>
+    <!-- 表头功能插入 -->
     <div class="upbtn">
         <div class="layui-upload">
             <button type="button" class="layui-btn" id="import"><i class="layui-icon">&#xe67c;</i>导入</button>
@@ -68,12 +69,12 @@
     </div>
 
 
-
+    <!-- 数据表格主体 -->
     <table class="layui-hide" id="roster" lay-filter="demo"></table>
 
 
 
-
+    <!-- 数据表格行编辑按钮 -->
     <script type="text/html" id="demo">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     </script>
@@ -90,7 +91,7 @@
                 , url: 'json/users2.json'
                 , cellMinWidth: 80 //全局定义常规单元格的最小宽度
                 , page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
-                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局  < 1 2 3 >
                     , curr: 1 //设定初始在第 1 页
                     , groups: 10 //只显示 1 个连续页码
                     , first: false //不显示首页
