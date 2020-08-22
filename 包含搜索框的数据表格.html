@@ -206,18 +206,16 @@
             });
 
             // 右侧工具栏-编辑
+            // 父子页面弹窗
             table.on('tool(demo)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
                 var data = obj.data //获得当前行数据（json格式的键值对）
                     , layEvent = obj.event //获得 lay-event 对应的值（编辑、删除、添加）
-
-                // console.log("当前行data")
-                // console.log(data)
 
                 if (layEvent === 'edit') {
 
                     json = JSON.stringify(data);
                     // 其实不转成字符串也可以 如： json = data; 这样子页面接收时都不用转回对象了，直接用就行
-                    console.log(json)
+                    // console.log(json)
 
                     layer.open({
                         type: 1
@@ -309,7 +307,8 @@
                             // parent.json  parent是父页面  json是在一开始就定义的一个父页面的全局变量
                             // parent.json 是一个字符串 因为父页面保存的时候通过JSON.stringify转成字符串了
                             // 再通过JSON.parse转回对象就行了
-                            var parent_json = JSON.parse(parent.json);
+                            // var parent_json = JSON.parse(parent.json);
+                            var parent_json = JSON.parse(json);
                             console.log(parent_json);
 
                             // 通过子页面的form标签进行数据的一次性填入
