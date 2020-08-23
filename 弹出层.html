@@ -358,99 +358,97 @@
           });
       })
     }
-  </script>
+  </script>-->
 
-  <script> -->
-
-
-  layui.use("layer", function () {
-
-  // 确认框 确认 取消按钮
-  // layer.confirm('is not?', { icon: 3, title: '提示' }, function (index) {
-  // //do something
-  // // 点击确认后的动作是打印，然后关闭， 点击取消不会触发函数，只是关闭而已
-  // console.log(index)
-  // alert("dksajflka")
-  // layer.close(index);
-
-  // });
+  <script>
 
 
-  // layer.confirm('<b>请确保下载后仅用于评审查看，不得将下载内容用于其他任何用途。</b>下载的所有内容，包括文字、图片,均为原创。对未经许可擅自使用者，本司保留追究其法律责任的权利。'
-  // , { icon: 15, title: '下载声明' }
-  // , function (index) {
-  // //do something
-  // // 点击确认后的动作是打印，然后关闭， 点击取消不会触发函数，只是关闭而已
+    layui.use("layer", function () {
 
-  // layer.close(index);
+      // 确认框 确认 取消按钮
+      // layer.confirm('is not?', { icon: 3, title: '提示' }, function (index) {
+      // //do something
+      // // 点击确认后的动作是打印，然后关闭， 点击取消不会触发函数，只是关闭而已
+      // console.log(index)
+      // alert("dksajflka")
+      // layer.close(index);
 
-  // });
-
-
-
-  // 版权声明
-
-  // layer.confirm('<b>请确保下载后仅用于评审查看，不得将下载内容用于其他任何用途。</b>下载的所有内容，包括文字、图片,均为原创。对未经许可擅自使用者，本司保留追究其法律责任的权利。'
-  // // , { icon: 15, title: '下载声明' }
-  // // 如果设置标题和图标，则会变成默认的确认按钮，无法使用自定义的btn！
-  // , {
-  // btn: ['同意', '不同意'],
-  // btn1: function (index) {
-  // return true;
-  // layer.close(index);
-  // },
-  // btn2: function (index) {
-  // layer.msg("请先同意下载声明，否则不能进行下载")
-  // return false;
-  // layer.close(index);
-  // }
-
-  // });
+      // });
 
 
+      // layer.confirm('<b>请确保下载后仅用于评审查看，不得将下载内容用于其他任何用途。</b>下载的所有内容，包括文字、图片,均为原创。对未经许可擅自使用者，本司保留追究其法律责任的权利。'
+      // , { icon: 15, title: '下载声明' }
+      // , function (index) {
+      // //do something
+      // // 点击确认后的动作是打印，然后关闭， 点击取消不会触发函数，只是关闭而已
+
+      // layer.close(index);
+
+      // });
+
+
+
+      // 版权声明
+
+      // layer.confirm('<b>请确保下载后仅用于评审查看，不得将下载内容用于其他任何用途。</b>下载的所有内容，包括文字、图片,均为原创。对未经许可擅自使用者，本司保留追究其法律责任的权利。'
+      // // , { icon: 15, title: '下载声明' }
+      // // 如果设置标题和图标，则会变成默认的确认按钮，无法使用自定义的btn！
+      // , {
+      // btn: ['同意', '不同意'],
+      // btn1: function (index) {
+      // return true;
+      // layer.close(index);
+      // },
+      // btn2: function (index) {
+      // layer.msg("请先同意下载声明，否则不能进行下载")
+      // return false;
+      // layer.close(index);
+      // }
+
+      // });
 
 
 
 
-  // // msg提示框 默认显示3秒关闭
-  // layer.msg('只想弱弱提示');
-
-  // // 带图标
-  // layer.msg('有表情地提示', { icon: 6 });
-  // layer.msg('不开心', {icon: 5});
-
-  // 提示结束后触发函数
-  // layer.msg('关闭后触发函数', function () {
-  // //do something
-  // alert("dkfjla")
-  // });
-
-  // //设置关闭消息的时间
-  // layer.msg('手动设置几秒后关闭，并触发函数', {
-  // icon: 1,
-  // time: 2000
-  // //2秒关闭（如果不配置，默认是3秒）
-  // }, function () {
-  // //do something
-  // alert("djklajsf")
-  // });
 
 
+      // // msg提示框 默认显示3秒关闭
+      // layer.msg('只想弱弱提示');
 
-  // //默认皮肤可以传入0-6 就是会有个勾勾或者叉叉一类的图案
-  // layer.alert('酷毙了', {icon: 0 });
+      // // 带图标
+      // layer.msg('有表情地提示', { icon: 6 });
+      // layer.msg('不开心', {icon: 5});
 
-  // layer.alert('酷毙了', { icon: 0, title: '标题' });
+      // 提示结束后触发函数
+      // layer.msg('关闭后触发函数', function () {
+      // //do something
+      // alert("dkfjla")
+      // });
 
-  // layer.alert('有了回调', { icon: 1 }, function (index) {
-  // // do something
-  // // 这个function是点击确认按钮时触发的
-  // console.log(index)
-  // // 关闭alert
-  // layer.close(index);
-  // });
+      // //设置关闭消息的时间
+      // layer.msg('手动设置几秒后关闭，并触发函数', {
+      // icon: 1,
+      // time: 2000
+      // //2秒关闭（如果不配置，默认是3秒）
+      // }, function () {
+      // //do something
+      // alert("djklajsf")
+      // });
 
 
+
+      // //默认皮肤可以传入0-6 就是会有个勾勾或者叉叉一类的图案
+      // layer.alert('酷毙了', {icon: 0 });
+
+      // layer.alert('酷毙了', { icon: 0, title: '标题' });
+
+      // layer.alert('有了回调', { icon: 1 }, function (index) {
+      // // do something
+      // // 这个function是点击确认按钮时触发的
+      // console.log(index)
+      // // 关闭alert
+      // layer.close(index);
+      // });
 
 
 
@@ -459,81 +457,87 @@
 
 
 
-  // // 加载层，可以传入0-2
-  // layer.load(2); //加载的转圈圈样式，会一直在，用于提价的时候
-
-  // var index = layer.load(0);
-  // layer.close(index); 用于关闭load
-
-  // var index = layer.load(0, { time: 3 * 1000 }); //加载风格2 且设定最长等待3秒后自动关闭加载图标
 
 
-  // 用于在上传文件的时候展示loading动画效果
-  // before: function () {
-  // layer.msg('上传中，请稍等', {
-  // icon: 16,
-  // shade: 0.01,
-  // time: 0
-  // })
-  // },
-  // ,done: function(res){
-  // //关闭上传等待动画
-  // layer.close(layer.msg());
-  // }
+      // // 加载层，可以传入0-2
+      // layer.load(2); //加载的转圈圈样式，会一直在，用于提价的时候
+
+      // var index = layer.load(0);
+      // layer.close(index); 用于关闭load
+
+      // var index = layer.load(0, { time: 3 * 1000 }); //加载风格2 且设定最长等待3秒后自动关闭加载图标
 
 
-  // // 用于ajax的loading提示写法
-  // $.ajax({
-
-  // // 用于ajax的loading提示写法
-  // layerIndex: -1,
-  // beforeSend: function () {
-  // layer.msg('上传中，请稍等', {
-  // icon: 16,
-  // shade: 0.01,
-  // time: 0
-  // })
-  // //另一种动画效果
-  // // this.layerIndex = layer.load(0, { shade: [0.5, '#393D49'] });
-  // },
+      // 用于在上传文件的时候展示loading动画效果
+      //   ,before: function () {
+      //       layer.msg('上传中，请稍等', {
+      //         icon: 16,
+      //         shade: 0.01,
+      //         time: 0
+      //       })
+      //     }
+      // , done: function(res) {
+      //       //关闭上传等待动画
+      //       layer.close(layer.msg());
+      //     }
 
 
-  // url: "",
-  // type: 'POST',
-  // data: data,
-
-  // success: function (data) {
-  // if (data['code'] == 200) {
-
-  // //关闭上传等待动画
-  // layer.close(layer.msg());
-
-  // //另一种的loading的效果结束方式
-  // // layer.close(this.layerIndex);
-
-
-  // }
-  // },
-  // });
+      // 用于ajax的loading提示写法
+      // $.ajax({
+      //   // 用于ajax的loading提示写法
+      //   beforeSend: function () {
+      //     layer.msg('上传中，请稍等', {
+      //       icon: 16,
+      //       shade: 0.01,
+      //       time: 0
+      //     })
+      //   },
 
 
 
+        //ajax的loading另一种动画效果
+        // layerIndex: -1,
+        // beforeSend: function () {
+        //   this.layerIndex = layer.load(0, { shade: [0.5, '#393D49'] });
+        // },
+
+
+        // url: "",
+        // type: 'POST',
+        // data: data,
+
+        // success: function (data) {
+        // if (data['code'] == 200) {
+
+        // //关闭上传等待动画
+        // layer.close(layer.msg());
+
+        // //另一种的loading的效果结束方式
+        // // layer.close(this.layerIndex);
+
+
+        // }
+        // },
+        // });
 
 
 
-  // /*
-  // layer.style(index, cssStyle) - 重新定义层的样式
-  // 该方法对loading层和tips层无效。参数index为层的索引，
-  // cssStyle允许你传入任意的css属性
-  // */
-  // var testindex = layer.open();
-  // layer.style(testindex, {
-  // width: '500px',
-  // top: '80px'
-  // });
 
 
-  })
+
+        // /*
+        // layer.style(index, cssStyle) - 重新定义层的样式
+        // 该方法对loading层和tips层无效。参数index为层的索引，
+        // cssStyle允许你传入任意的css属性
+        // */
+        // var testindex = layer.open();
+        // layer.style(testindex, {
+        // width: '500px',
+        // top: '80px'
+        // });
+
+
+      })
   </script>
 
 
