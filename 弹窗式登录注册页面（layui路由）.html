@@ -174,6 +174,41 @@
       </div>
     </ul>
 
+    <script>
+      /* 前端路由
+      
+      // 截取url的参数 方法一：
+      function getQuery() {
+        const url = decodeURI(location.search); // 获取url中"?"符后的字串(包括问号)
+        let query = {};
+        if (url.indexOf("?") != -1) {
+          // 判断是否带请求参数
+          const str = url.substr(1); // 去除url中的?
+          const pairs = str.split("&"); // 以&分割各个参数
+          for (let i = 0; i < pairs.length; i++) {
+            const pair = pairs[i].split("="); // 以 = 分割 key和 value
+            query[pair[0]] = pair[1];
+          }
+        }
+        return query; // 返回请求参数对象
+      }
+
+      var query = getQuery();
+      data: {
+        infoId: query.infoId;
+      }
+
+      // <!-- !方法二： layui的前端路由接收参数 -->
+      // //前一个页面的跳转链接： href="./html/informationNew.html?/#/infoId=1"   ?/#/infoId=1 先写? 再写/#/，不然无法跳转页面
+      // var router = layui.router();
+      // layui.router()会获取所有的拼接数据，通过.search.拼接数据名称就能找到
+      // // 这个infoId就是链接拼接的传参
+      // console.log(router.search.infoId);
+
+
+     */
+    </script>
+
     <!-- 把导航栏的js放在header.html里，否则会触发bug，导致导航栏无法点击 -->
     <script>
       // 导航栏的jquery
