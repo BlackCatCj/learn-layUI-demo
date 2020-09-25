@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./layui/css/layui.css" />
+    <script src="./layui/layui.js"></script>
+    <style>
+      .header-ul {
+        text-align: center;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .header-ul li {
+        width: 33%;
+      }
+      .header-ul li a {
+        font-size: 25px;
+      }
+      .table-class {
+        width: 90%;
+        margin: 10px auto;
+      }
+      .title {
+        margin: 15px 0;
+      }
+
+      .lable-class,
+      .title span {
+        font-size: 20px;
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <ul class="layui-nav layui-bg-blue header-ul">
+      <!-- javascript:void(0) 用于阻止a标签刷新页面 -->
+      <li class="layui-nav-item"><a href="javascript:void(0)">初级组</a></li>
+      <li class="layui-nav-item"><a href="javascript:void(0)">中级组</a></li>
+      <li class="layui-nav-item"><a href="javascript:void(0)">高级组</a></li>
+    </ul>
+    <div class="title">
+      <label class="lable-class">当前组别： </label>
+      <span id="group"></span>
+    </div>
+    <!-- 数据表格主体 -->
+    <div class="table-class">
+      <table class="layui-hide" id="roster" lay-filter="demo"></table>
+    </div>
+    <!-- 数据表格行编辑按钮 -->
+    <script type="text/html" id="demo">
+      <a class="layui-btn layui-btn-xs" lay-event="details">详情</a>
+    </script>
+
+    <script>
+      layui.use(["table", "element", "upload"], function () {
+        var table = layui.table;
+        var upload = layui.upload;
+        var form = layui.form;
+        var $ = layui.$;
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+        var json;
+
+        table.render({
+          elem: "#roster",
+          url: "json/users2.json",
+          cellMinWidth: 80, //全局定义常规单元格的最小宽度
+          page: {
+            //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+            layout: ["limit", "count", "prev", "page", "next", "skip"], //自定义分页布局  < 1 2 3 >
+            curr: 1, //设定初始在第 1 页
+            groups: 10, //只显示 1 个连续页码
+            first: false, //不显示首页
+            last: false, //不显示尾页
+            limit: 10,
+          },
+          // 将field的值修改为后端传来的名称
+          cols: [
+            [
+              { field: "id", title: "排名", sort: true },
+              { field: "name", title: "队伍" },
+              { field: "idCard", title: "成员" },
+              { field: "sex", title: "总分" },
+              { field: "totalGrade", title: "用时" },
+              {
+                fixed: "right",
+                title: "操作",
+                width: 178,
+                align: "center",
+                toolbar: "#demo",
+              },
+            ],
+          ],
+          id: "roster",
+        });
+
+        // 获取当前导航栏点击的组别，进行表格的重载
+        var demoReload;
+        $(".layui-nav-item").click(function () {
+          demoReload = $(this).text();
+          $("#group").html(demoReload);
+          console.log(demoReload);
+        });
+        /*!查询框进行表格重载的方法：1*/
+
+        var active = {
+          reload: function () {
+            table.reload(
+              "roster",
+              {
+                url: "#", //这个接口要后端写好查询语句，根据where返回的username进行查询并返回数据
+                method: "get",
+                page: {
+                  curr: 1, //重新从第 1 页开始
+                },
+                where: {
+                  username: demoReload,
+                },
+              },
+              "data"
+            );
+          },
+        };
+        $(".layui-nav-item").on("click", function () {
+          var type = $(this).data("type");
+          active[type] ? active[type].call(this) : "";
+        });
+
+        // 查询框进行表格重载的方法：2 这种方法更简单些
+
+        // $('.demoTable .layui-btn').on('click', function () {
+        //     if ($('#demoReload').val() == "") {
+        //         layer.msg('查询项目不能为空');
+        //         return false;
+        //     }
+
+        //     reloadTable();
+
+        // });
+        // function reloadTable() {
+        //     table.reload('testReload', {
+        //         url: '#',  //这个接口要后端写好查询语句，根据where返回的username进行查询并返回数据
+        //         where: { "username": $('#demoReload').val() }
+        //     });
+        // }
+
+        // 右侧工具栏-编辑
+        // 父子页面弹窗
+        table.on("tool(demo)", function (obj) {
+          //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+          var data = obj.data, //获得当前行数据（json格式的键值对）
+            layDetails = obj.event; //获得 lay-event 对应的值（编辑、删除、添加）
+
+          if (layDetails === "details") {
+            alert("djklajf");
+            window.location.href='/page2'
+            // json = JSON.stringify(data);
+            // // 其实不转成字符串也可以 如： json = data; 这样子页面接收时都不用转回对象了，直接用就行
+            // // console.log(json)
+            // layer.open({
+            //   type: 1,
+            //   title:
+            //     '<i class="layui-icon layui-icon-survey" style="font-size: 18px; color: #1E9FFF;"><b>详情</b> </i>',
+            //   area: ["450px", "350px"],
+            //   btnAlign: "r",
+            //   content: "填充东西",
+            //   btn2: function (index, layero) {
+            //     // 关闭弹窗
+            //     layer.close(index);
+            //     //return false 开启该代码可禁止点击该按钮关闭
+            //   },
+            //   closeBtn: 2,
+            //   // 右上角的叉叉按钮样式 0-2
+            //   // 两种风格的关闭按钮，可通过配置1和2来展示，如果不显示，则closeBtn: 0
+            //   shade: [0.8, "#393D49"],
+            //   success: function (layero, index) {
+            //     // 从父页面获取行数据
+            //     // parent.json  parent是父页面  json是在一开始就定义的一个父页面的全局变量
+            //     // parent.json 是一个字符串 因为父页面保存的时候通过JSON.stringify转成字符串了
+            //     // 再通过JSON.parse转回对象就行了
+            //     // var parent_json = JSON.parse(parent.json);
+            //     var parent_json = JSON.parse(json);
+            //     // console.log(parent_json);
+            //     // 通过子页面的form标签进行数据的一次性填入
+            //     form.val("formTest", parent_json);
+            //     // 因为不通过form里的按钮进行提交，所以必须进行设置，将弹出层的按钮转换成表单的提交按钮
+            //     layero.addClass("layui-form");
+            //     // 将确认按钮改变成提交按钮
+            //     layero.find(".layui-layer-btn0").attr({
+            //       "lay-filter": "formDemo",
+            //       "lay-submit": "",
+            //     });
+            //     // 重载表单，否则无法应用
+            //     form.render();
+            //   },
+            // });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
