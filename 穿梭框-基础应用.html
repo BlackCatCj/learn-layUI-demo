@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+  <title>参与活动</title>
+  <link rel="stylesheet" href="./resources/layui/css/layui.css" />
+  <!-- jquery文件必须写在其他js文件之前,否则会报错!! -->
+  <!-- <script src="./js/jquery-3.5.1.min.js"></script> -->
+  <script src="./resources/layui/layui.js"></script>
+</head>
+
+<body>
+
+  <div id="test1" class="demo-transfer"></div>
+
+  <!-- 实例调用 -->
+  <div class="layui-btn-container">
+    <button type="button" class="layui-btn" cj-transferactive="cjGetRightData">获取右侧数据</button>
+    <button type="button" class="layui-btn" cj-transferactive="cjReloadTransferactive">重载实例</button>
+  </div>
+
+  <script>
+    layui.use(['transfer', 'layer', 'util'], function () {
+      var $ = layui.$
+        // 穿梭框
+        , transfer = layui.transfer
+        , layer = layui.layer
+        // 引入工具集util 由多个小工具组件组成，可提供良好的辅助作用
+        , util = layui.util;
+
+      //模拟数据
+      var testData = [
+        { "value": "1", "title": "李白" }
+        , { "value": "2", "title": "杜甫" }
+        , { "value": "3", "title": "苏轼" }
+        , { "value": "4", "title": "李清照" }
+        // 禁用效果
+        // , { "value": "5", "title": "鲁迅", "disabled": true }
+        , { "value": "6", "title": "巴金" }
+        , { "value": "7", "title": "冰心" }
+        , { "value": "8", "title": "矛盾" }
+        , { "value": "9", "title": "贤心" }
+      ]
+
+
+
+      //基础效果
+      transfer.render({
+        elem: '#test1'
+        , width: 400
+        , height: 300
+        // 穿梭框的内容
+        , data: testData
+        , title: ['标题一', '标题二']
+        // 初始化右侧数据
+        , value: ["1", "3", "9"]
+
+        // 显示搜索框  这个搜索框能模糊搜索内容
+        , showSearch: true
+        // 左右数据穿梭后的回调函数
+        , onchange: function (obj, index) {
+          // console.log(obj)  //obj的值是个数组对象，选中的穿梭内容将保存在这个数组里
+          // console.log(index) //index的值有0 1两种，0表示左边的数据穿梭到右边  1表示右边的数据穿梭到左边
+
+          // var arr = ['左边', '右边'];
+          // console.log('来自 <strong>' + arr[index] + '</strong> 的数据：' + JSON.stringify(obj)); //获得被穿梭时的数据
+        }
+        //定义唯一索引
+        , id: 'cjTransfer'
+
+        //! 如果数据格式没有问题，就不要写上这个转换数据格式的东西，否则会导致强行转换数据，出现undefind
+        // , parseData: function (res) {
+        //   return {
+        //     "value": res.id //数据值    意思是你的数据本应该是value的，被命名成id，所以这里写成这样
+        //     , "title": res.name //数据标题
+        //     , "disabled": res.disabled  //是否禁用
+        //     , "checked": res.checked //是否选中
+        //   }
+        // }
+      })
+
+      //批量办法处理事件 工具集
+      /**
+      util.event(attr, obj, eventType)
+
+      ！参数 attr：绑定需要监听事件的元素 属性  属性值得就是：
+      例如：button标签中的自己定义的一个 叫做 cj-transferactive 的！！属性！！  随便叫啥名字，只要写在里面就是这个标签的属性
+      <button type="button" class="layui-btn" cj-transferactive="cjGetRightData">获取右侧数据</button>
+      cj-transferactive="cjGetRightData"   cj-transferactive是自定义的属性名    cjGetRightData就是自定义属性名的值
+
+      ！参数 obj：事件回调链  {自定义属性的自己定义的值1:function(){},自定义属性的自己定义的值2:function(){}}
+
+      ！参数 eventType：事件类型（默认  'click' ） 也可以改成  'mouseenter' (鼠标移入) 之类的
+      */
+      util.event('cj-transferactive', {
+        // 通过 自定义属性的自己定义的值 进行方法调用
+        cjGetRightData: function () {
+          // transfer.getData('自己定义的穿梭框id'); //获得右侧数据的方法
+          var RData = transfer.getData('cjTransfer'); //获取右侧数据
+          console.log(RData)
+        }
+        , cjReloadTransferactive: function () {
+          //穿梭框 重载  根据给穿梭狂定义的id找到对应的穿梭框
+          // ! 注意，重载只是在原有基础上进行指定修改，重载中没写的，而本来有的设置则是不会改变的，仍然生效
+          // 比如这里重载我没有设置
+          transfer.reload('cjTransfer', {
+            title: ['重载后的文人', '重载后的喜欢的文人']
+            // 右侧初始数据
+            , value: ['2', '5', '9']
+          })
+        }
+      }, 'click')
+    })
+  </script>
+
+
+
+
+
+</body>
+
+</html>
