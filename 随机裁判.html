@@ -89,11 +89,11 @@
 
 <body>
 
-  <div class="layui-tab">
+  <div class="layui-tab" lay-filter="cj_filter_tab">
     <ul class="layui-tab-title">
-      <li class="layui-this">项目1</li>
-      <li>项目2</li>
-      <li>项目3</li>
+      <li cj_data_status="1" class="layui-this">项目1</li>
+      <li cj_data_status="2">项目2</li>
+      <li cj_data_status="3">项目3</li>
     </ul>
 
 
@@ -164,20 +164,23 @@
       </div>
       <!-- 第一个项目tag内容区域 -->
 
-      <div class="layui-tab-item">内容2</div>
-      <div class="layui-tab-item">内容3</div>
+      <!-- <div class="layui-tab-item">内容2</div>
+      <div class="layui-tab-item">内容3</div> -->
 
     </div>
   </div>
 
 
   <script>
-    layui.use(['table', 'form', 'element', 'jquery'], function () {
+    layui.use(['table', 'form', 'element', 'jquery', 'laytpl'], function () {
       var table = layui.table;
       var form = layui.form;
       var $ = layui.$
+      var element = layui.element
+      var laytpl = layui.laytpl
       // 存放选取的有空的裁判的id，传给后端
       var free_judege_id = []
+
 
       // 左侧裁判数据表格
       table.render({
@@ -435,6 +438,38 @@
 
         };
       })
+
+      // -----------------------------------tag切换不同表格--------------------------------------------------------------------
+
+      function reloadCjTableData(reloadTableUrl) {
+        // 重载表格的时候，如果原来的表格用的是url，那么重载里的data就没作用了，所以两边要一致，要么全用url，要么全用data
+        table.reload('dataTableL', { url: reloadTableUrl });
+      }
+
+
+      element.render('tab'); // 重新对导航进行渲染
+      element.on('tab(cj_filter_tab)', function (data) {
+        console.log(this); //当前Tab标题所在的原始DOM元素
+        // console.log(data.index); //得到当前Tab的所在下标
+        // console.log(data.elem); //得到当前的Tab大容器
+        // 默认的表格url地址
+        var reloadTableUrl = './json/demo1.json'
+        // 获取tag切换头的自定义数据
+        var status = $(this).attr('cj_data_status')
+        // 不同tag头的数据对应不同的表格重载地址
+        switch (status) {
+          case '1': reloadTableUrl = './json/demo1.json'; break;
+          case '2': reloadTableUrl = './json/demo2.json'; break;
+          case '3': reloadTableUrl = './json/demo2.json'; break;
+          default: reloadTableUrl = './json/demo1.json';
+        }
+        // 调用重载表格函数
+        reloadCjTableData(reloadTableUrl);
+
+      })
+
+      // -----------------------------------tag切换不同表格--------------------------------------------------------------------
+
 
       //*******************点击保存数据按钮的时候， 获取右侧卡片中的指定位置的数据，（裁判id），将其传给后端，用于保存选中的裁判***************************
       $("#cjSaveJudgeData").click(function () {
