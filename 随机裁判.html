@@ -12,6 +12,21 @@
   <!-- <script src="./js/jquery-3.5.1.min.js"></script> -->
   <script src="./resources/layui/layui.js"></script>
   <style>
+    /* 右侧卡片的删除按钮 */
+    .cjDelBtn {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .cjSaveFreeJudges {
+      position: absolute;
+      margin-top: 20px;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
     .lablecard {
       /* border: 1px solid red; */
       margin: 10px;
@@ -70,11 +85,11 @@
           <div class="layui-col-lg5">
             <table class="layui-table" id="layui_table_L" lay-filter="dataTableL"></table>
 
-            <script type="text/html" id="toolbarDemoL">
+            <!-- <script type="text/html" id="toolbarDemoL">
               <div class="layui-btn-container">
                 <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
               </div>
-            </script>
+            </script> -->
 
             <!--绑定每一行右侧操作 -->
             <script type="text/html" id="barDemoL">
@@ -94,17 +109,15 @@
           <!-- 中间的穿梭按钮 -->
 
           <!-- 右侧的表格数据 -->
-          <div class="layui-col-lg6">
-            <!--  <table class="layui-table" id="layui_table_R" lay-filter="dataTableL"></table>
+          <div class="layui-col-lg6" style="margin-top: 20px; border: 1px solid gray; min-height: 70vh;">
 
-            <script type="text/html" id="barDemoR">
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-            </script>-->
-            <div class="row" id="time_free_person">
+            <div class="row" id="time_free_person" style="margin-bottom: 50px;">
+              <!-- 静态卡片，用于调整样式 -->
               <!-- <div class="layui-col-lg4 card">
                 <div class="classCard">
                   <div class="layui-card-header">
                     <h3>姓名：裁判1</h3>
+                    <button type="button" class="layui-btn layui-btn-sm cjDelBtn "  > <i class="layui-icon layui-icon-delete"></i></button >
                   </div>
                   <div class="layui-card-body">
                     <h3>性别：男</h3>
@@ -115,6 +128,11 @@
               </div> -->
 
             </div>
+            <!-- 保存有空的裁判id，发送给后端 -->
+            <div class="row cjSaveFreeJudges">
+              <button id="cjSaveJudgeData" type="button" class="layui-btn layui-btn-lg">保存有空的裁判</button>
+            </div>
+
           </div>
 
           <!-- 右侧的表格数据 -->
@@ -139,13 +157,15 @@
       var form = layui.form;
       var $ = layui.$
 
+      var free_judege_id = []
+
       table.render({
         elem: '#layui_table_L',//指定表格元素
         id: "dataTableL",
         cellMinWidth: 20, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
         skin: 'line ' //表格风格 line （行边框风格）row （列边框风格）nob （无边框风格）
         //,even: true    //隔行换色
-        , toolbar: '#toolbarDemoL' //开启头部工具栏，并为其绑定左侧模板
+        // , toolbar: '#toolbarDemoL' //开启头部工具栏，并为其绑定左侧模板
         , defaultToolbar: [] //如无需自定义右侧图表，去除该参数即可
         , url: './json/demo1.json' //请求路径
         // , page: true  //开启分页
@@ -261,6 +281,49 @@
         };
       })
 
+      //*******************点击保存数据按钮的时候， 获取右侧卡片中的指定位置的数据，（裁判id），将其传给后端，用于保存选中的裁判***************************
+      $("#cjSaveJudgeData").click(function () {
+        // 循环右侧的所有卡片
+        $("#time_free_person .card").each(function (index, e) {
+          // 根据模板字符串，匹配动态生成的时候设置的特殊class，用于获取指定数据值（裁判的id）
+          // ! 注意，模板字符串在 $() 中不要再写上 "" 了，否则是识别不了的
+          var judege_id = $(`#time_free_person .card .layui-card-body .freejudgeid${index}`)
+          // b.attr("value") 就是每个卡片上的裁判id值
+          // console.log(judege_id.attr("value"))
+          free_judege_id.push(judege_id.attr("value"))
+        })
+        // free_judege_id数组就是最终的有空的裁判的id
+        console.log(free_judege_id)
+
+        // 将左侧选中的数据传给后端，再通过重载右侧表格获取回来
+        $.ajax({
+          url: "/fjaisc/groupJudge/distributionWorks",
+          type: 'POST',
+          data: { "judges": free_judege_id },
+          datatype: "json",
+          async: false,
+          success: function (res) {
+            if (res.code == 200) {
+              layer.msg("保存成功");
+              // 刷新页面
+            }
+          }
+        })
+
+      });
+      //*******************点击保存数据按钮的时候， 获取右侧卡片中的指定位置的数据，（裁判id），将其传给后端，用于保存选中的裁判***************************
+
+      //----------------------------------------- 每个有空的裁判卡片的删除按钮操作--------------------------------------
+      $("#time_free_person").delegate('.cjDelBtn', 'click', function () {
+        // 这个删除按钮的父元素的父元素就是这个按钮所在的整个卡片，把它删掉
+        $(this).parent().parent().parent().remove();
+      });
+      //当动态添加的按钮没有点击事件时(也就是因为动态添加的，$找不到它)
+      // 此时，可以通过#time_free_person这个本来就在页面加载好的div（其父容器），进行选择找到它
+      // $('#time_free_person').on('click', '.cjDelBtn', function () {   });
+
+      //----------------------------------------- 每个有空的裁判卡片的删除按钮操作--------------------------------------
+
       //-----------------------------------选取裁判项目按钮---------------------------------------
       $("#makeJudgeBtn").click(function () {
         /*
@@ -276,44 +339,33 @@
 
         // 获取选中行的数据
         var freeData = table.checkStatus("dataTableL").data
-        // console.log(JSON.parse(JSON.stringify(freeData)))
+        // console.log(JSON.parse(JSON.stringify(freeData))) onclick=\"del_free_judge()\"
         // console.log(freeData[0].username)
-        document.getElementById('time_free_person').innerHTML = function () {
-          var arr = [];
-          for (var i = 0; i < freeData.length; i++) {
-            arr.push("<div class=\"layui-col-lg4 card\">\n" +
-              "                <div class=\"classCard\">\n" +
-              "                  <div class=\"layui-card-header\">\n" +
-              "                    <h3>姓名：" + freeData[i].username + "</h3>\n" +
-              "                  </div>\n" +
-              "                  <div class=\"layui-card-body\">\n" +
-              "                    <h3>性别：" + freeData[i].sex + "</h3>\n" +
-              "                    <h3>信息：杭州</h3>\n" +
-              "                    <h3>电话：123456789</h3>\n" +
-              "                  </div>\n" +
-              "                </div>\n" +
-              "              </div>");
-          }
-          return arr.join('');
-        }();
+        var addArr = [];
+        for (var i = 0; i < freeData.length; i++) {
+          addArr.push("<div class=\"layui-col-lg4 card\">\n" +
+            "                <div class=\"classCard\">\n" +
+            "                  <div class=\"layui-card-header\">\n" +
+            "                    <h3>姓名：" + freeData[i].username + "</h3>" +
+            "                         <button type=\"button\" class=\"layui-btn layui-btn-sm cjDelBtn \"  > <i class=\"layui-icon layui-icon-delete\"></i></button > " +
+            "                  </div>\n" +
+            "                  <div class=\"layui-card-body\">\n" +
+            "                    <h2 class='freejudgeid" + i + "' value='" + freeData[i].id + "' >id：" + freeData[i].id + "</h2>\n" +
+            "                    <h3 >性别：" + freeData[i].sex + "</h3>\n" +
+            "                    <h3>信息：杭州</h3>\n" +
+            "                    <h3>电话：123456789</h3>\n" +
+            "                  </div>\n" +
+            "                </div>\n" +
+            "              </div>");
+        }
+        // 向指定id容器内的尾部添加内容
+        $('#time_free_person').append(addArr)
 
 
-        // 将左侧选中的数据传给后端，再通过重载右侧表格获取回来
-        // $.ajax({
-        //   url: "/fjaisc/groupJudge/distributionWorks",
-        //   type: 'POST',
-        //   data: { "judges": judgesID },
-        //   datatype: "json",
-        //   async: false,
-        //   success: function (res) {
-        //     if (res.code == 200) {
-        //       layer.msg("选取成功");
-        //       跳转页面
-        //     }
-        //   }
-        // })
+
       });
       //-----------------------------------选取裁判项目按钮---------------------------------------
+
 
 
 
