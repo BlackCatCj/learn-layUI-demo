@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="./resources/layui/css/layui.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all" />
+  <!-- jquery文件必须写在其他js文件之前,否则会报错!! -->
+  <!-- <script src="./js/jquery-3.5.1.min.js"></script> -->
+  <script src="./resources/layui/layui.js"></script>
+  <style>
+
+  </style>
+</head>
+
+<body>
+
+  <table id="myTable" lay-filter="myTableFilter" style=" width: 100%;"></table>
+  <!-- -------------------------------------------头部工具栏-------------------------------------- -->
+  <!-- <script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+      <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+      <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+      <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+      <button class="layui-btn layui-btn-sm" lay-event="savecj">保存</button>
+    </div>
+  </script> -->
+  <!-- -------------------------------------------头部工具栏-------------------------------------- -->
+
+  <!-- -------------------------------------------行内工具栏-------------------------------------- -->
+  <!--! layui-soul-table 的行内工具栏是通过右键菜单来实现的 -->
+  <!-- -------------------------------------------行内工具栏-------------------------------------- -->
+
+
+  <script>
+    // 一种使用方式
+    layui.config({
+      base: './js/ext/'
+    }).extend({
+      soulTable: 'soulTable'
+    })
+    // 另一种使用方式
+    // 自定义模块，这里只需要开放soulTable即可
+    // layui.config({
+    //   base: './js/ext/',   // 第三方模块所在目录
+    // }).extend({
+    //   soulTable: '/soulTable',
+    //   tableChild: '/tableChild',
+    //   tableMerge: '/tableMerge',
+    //   tableFilter: '/tableFilter',
+    //   excel: '/excel',
+    // });
+
+
+    layui.use(['form', 'table', 'soulTable'], function () {
+      var table = layui.table,
+        soulTable = layui.soulTable;
+      // 用于模拟后端返回的数据，因为底下的文字部分有用模板字符串来获取标题
+      var titleText = 'ajax数据'
+
+      var myTableRender = table.render({
+        elem: '#myTable'
+        , id: 'myTableId'
+        , url: './json/demo1.json'
+        // 一般的头部工具栏按钮插入
+        // , toolbar: '#toolbarDemo'
+        //toolbar不仅可以通过在html部分使用script进行id插入，还可以直接在这里通过html代码进行写入
+        , toolbar: '<div><a class="layui-btn layui-btn-sm" lay-event="export"><i class="layui-icon layui-icon-download-circle"></i>请导出汇总表</a> <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="export2"><i class="layui-icon layui-icon-download-circle"></i>导出勾选数据</a></div>'
+
+        // 一般的头部工具栏右侧写法，就是默认的几个图标按钮，但是可以自己添加
+        // , defaultToolbar: ['print', 'exports']
+        // 自定义头部工具栏右侧图标按钮
+        , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+          title: 'cj的提示'
+          // 通过layEvent绑定头部点击事件，这样点击就会有反应了
+          , layEvent: 'cj_LAYTABLE_TIPS'
+          , icon: 'layui-icon-tips'
+        }]
+        // 不开启分页
+        , page: false
+        // 表格内容超出设置的列宽时，通过tip方式展示超出内容
+        , overflow: 'tips'
+        //全局定义常规单元格的最小宽度
+        , cellMinWidth: 100
+        // 表格的高度，超出高度会有滚动条
+        // , height: 500
+        // 自适应列宽
+        // , autoColumnWidth: {
+        //   init: true
+        // }
+        , cols: [[
+          // 第一行
+          { type: 'checkbox', rowspan: 4, fixed: 'left' },
+
+          { title: ' 2020年首届福建省青少年创意编程与智能设计大赛项目评审成绩汇总表', align: "center", colspan: 11, width: "100%" }
+
+        ],
+        // 第二行
+        [
+          { title: ` ${titleText}: 小学Ⅰ组⚪    ${titleText}: 小学Ⅱ组⚪    ${titleText}: 初中组⚪ `, colspan: 11, width: "100%", align: "center" }
+        ],
+        // 第三行
+        [
+          { field: 'id', title: '编号', align: "center", rowspan: 2 }
+          , { field: 'username', title: '项目名称', align: "center", rowspan: 2 }
+          , { field: 'username', title: '组别', align: "center", rowspan: 2 }
+          , { align: "center", title: '目标与创意', colGroup: true }
+          , { align: "center", title: '构思设计', colGroup: true }
+          , { align: "center", title: '程序设计', colGroup: true }
+          , { align: "center", title: '用户体验', colGroup: true }
+          , { align: "center", title: '艺术审美', colGroup: true }
+          , { align: "center", title: '材料描述', colGroup: true }
+          , { field: 'username', align: "center", field: 'city', title: '备注', align: "center", rowspan: 2 }
+          // 只要, fixed: "right" 那即使设置了rowspan: 2只占两行的效果就没了，会强制变成占满4行
+          , { field: 'username', align: "center", field: 'city', title: '总分', align: "center", fixed: "right", rowspan: 2 }
+        ],
+        [
+          { field: 'username', title: '满分20分', align: "center" }
+          , { field: 'username', title: '满分10分', align: "center" }
+          , { field: 'username', title: '满分20分', align: "center" }
+          , { field: 'username', title: '满分15分', align: "center" }
+          , { field: 'username', title: '满分15分', align: "center" }
+          , { field: 'username', title: '满分20分', align: "center" }
+        ]
+        ]
+        // , excel: { filename: '评审成绩汇总表.xlsx' }
+        // 保存成文件后，会在表格尾部添加data内的东西，在网页中不会显示，只有打印后才会显示出来
+        , excel: {
+          filename: '评审成绩汇总表.xlsx',
+          add: {
+            // bottom就是在表格尾部添加，也有top，就是在顶部添加
+            bottom: {
+              data: [
+                ['评委签名：'], // 尾部第一行数据, 中间的空数据是为了 merge 使用
+                ['注：每一页成绩评委均需签名'] //尾部第二行数据，由于我设置了后面的数据merge了，就只写一个
+              ],
+              // 这个高度有点bug，第一个数值会设置给添加的数据的上一个数据，所以只能用这种方式强行设置回来
+              heights: [, 50,],
+              // 从第一行第二列开始，一直合并到第一行第11列
+              merge: [['1,2', '1,11'], ['2,1', '2,11']]
+            }
+          }
+        }
+        //监听行工具事件 右键菜单
+        , contextmenu: {
+          // 表格内容右键菜单配置
+          body: [
+            {
+              name: '复制',
+              icon: 'layui-icon layui-icon-template',
+              click: function (obj) {
+                soulTable.copy(obj.text)
+                layer.msg('复制成功！')
+              }
+            },
+            {
+              name: '删除当前行数据',
+              click: function (obj) {
+                layer.confirm('真的删除行么', function (index) {
+                  obj.del();
+                  layer.close(index);
+                });
+              }
+            },
+            {
+              name: '更新数据',
+              click: function (obj) {
+                // obj.update({ author: obj.row.author + '+1' })
+                // 弹出文本输入框,根据输入的内容跟新指定属性值
+                layer.prompt({
+                  formType: 2
+                  , value: obj.username
+                }, function (value, index) {
+                  obj.update({
+                    username: value
+                  });
+                  layer.close(index);
+                });
+              }
+            },
+            {
+              name: '行-蓝色',
+              click: function (obj) {
+                obj.trElem.css('background', '#01AAED')
+              }
+            },
+            {
+              name: '当前格子文字-红色',
+              click: function (obj) {
+                obj.elem.css('color', 'red')
+              }
+            }
+          ]
+        }
+        , done: function () {
+          soulTable.render(this)
+        }
+
+      });
+      // 头部工具栏响应事件
+      table.on('toolbar(myTableFilter)', function (obj) {
+        // 导出成指定文件格式，同时表头、表尾均会被保存下来
+        switch (obj.event) {
+          case 'export':
+            soulTable.render(myTableRender.config)
+            // 导出函数
+            soulTable.export(myTableRender, {
+              // 这里的命名会覆盖 excel: { filename: '评审成绩汇总表.xlsx' }中的命名
+              // filename: '导出所有数据.xlsx'
+            });
+            break;
+          // 只导出勾选的数据-同样会导出表头表尾
+          case 'export2':
+            // 显示选中的数据  注意:获取checkbox选中的数据是通过表格的自定义id来定位的,因为复选框在行内
+            console.log(table.checkStatus('myTableId').data)
+            if (table.checkStatus('myTableId').data.length > 0) {
+
+              // 导出函数
+              soulTable.export(myTableRender, {
+                filename: '导出勾选数据.xlsx',
+                checked: true // 只导出勾选数据
+              });
+            } else {
+              layer.msg('勾选数据不能为空！');
+            }
+            break;
+
+          //自定义头工具栏右侧图标 - 提示
+          // 因为通过layEvent绑定了头部工具栏点击事件，所以也写在这里
+          case 'cj_LAYTABLE_TIPS':
+            layer.alert('这是工具栏右侧自定义的一个图标按钮，你也可以改成弹出层');
+            break;
+        }
+
+      });
+
+
+
+    })
+  </script>
+
+</body>
+
+</html>
