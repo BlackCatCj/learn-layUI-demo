@@ -201,7 +201,15 @@
         , done: function (res, curr, count) {
           soulTable.render(this)
         }
-
+        , parseData: function (res) {
+          return {
+            "code": res.code, //解析接口状态
+            "msg": res.msg, //解析提示文本
+            "count": res.count, //解析数据长度
+            //! 不同页的数据
+            "data": res.data //解析数据列表
+          };
+        }
       });
       // 头部工具栏响应事件
       table.on('toolbar(myTableFilter)', function (obj) {
@@ -209,11 +217,11 @@
         switch (obj.event) {
           case 'export':
             //***************************** 尝试刷新表格**************************************
-            table.render({ id: 'myTableId' })
+            // table.render({ id: 'myTableId' })
             //***************************** 尝试刷新表格**************************************
 
             // console.log(soulTable.render(myTableRender.config))
-            console.log(myTableRender.config)
+            // console.log(myTableRender.config)
 
             // 导出函数
             soulTable.export(myTableRender, {

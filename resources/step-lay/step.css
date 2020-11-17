@@ -1,0 +1,101 @@
+.lay-step {
+  font-size: 0;
+  width: 400px;
+  margin: 0 auto;
+  max-width: 100%;
+  padding-left: 200px;
+}
+
+.step-item {
+  display: inline-block;
+  line-height: 26px;
+  position: relative;
+  font-size: 14px;
+}
+
+.step-item-tail {
+  width: 100%;
+  padding: 0 10px;
+  position: absolute;
+  left: 0;
+  top: 13px;
+}
+
+.step-item-tail i {
+  display: inline-block;
+  width: 100%;
+  height: 1px;
+  vertical-align: top;
+  background: #c2c2c2;
+  position: relative;
+}
+
+.step-item-tail .step-item-tail-done {
+  background: #009688;
+}
+
+/* 步骤条的每一步的标签样式 */
+
+/* 默认的样式 */
+
+/* .step-item-head {
+  position: relative;
+  display: inline-block;
+  height: 26px;
+  width: 26px;
+  text-align: center;
+  vertical-align: top;
+  color: #168cd1;
+  border: 1px solid #168cd1;
+  border-radius: 50%;
+  background: #ffffff;
+} */
+
+/* 自己改的样式 */
+
+.step-item-head {
+  position: relative;
+  display: inline-block;
+  height: 26px;
+  width: 50px;
+  text-align: center;
+  vertical-align: top;
+  color: #168cd1;
+  border: 3px solid #168cd1;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+/* 当前步骤的步骤条选中样式 */
+
+.step-item-head.step-item-head-active {
+  background: #168cd1;
+  color: #ffffff;
+}
+
+.step-item-main {
+  display: block;
+  position: relative;
+  margin-left: -50%;
+  margin-right: 50%;
+  /* 这里的偏移和step-item-head中的width必须一样，否则会文字错位 */
+  padding-left: 50px;
+  text-align: center;
+}
+
+.step-item-main-title {
+  font-weight: bolder;
+  color: #555555;
+}
+
+.step-item-main-desc {
+  color: #aaaaaa;
+}
+
+.lay-step+[carousel-item]:before {
+  display: none;
+}
+
+.lay-step+[carousel-item]>* {
+  background-color: transparent;
+}
