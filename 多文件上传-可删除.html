@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="resources/layui/css/layui.css" />
+
+  <!-- <script src="../res/static/js/jquery-3.5.1.min.js"></script> -->
+  <script src="resources/layui/layui.js"></script>
+
+</head>
+
+<body>
+
+  <div class="layui-upload">
+    <!-- <button type="button" class="layui-btn layui-btn-normal" id="uploadListBtn">选择多文件</button> -->
+    <button type="button" class="layui-btn layui-btn-normal uploadListBtn">
+      <i class="layui-icon  layui-icon-upload"></i>
+      选择文件
+    </button>
+    <button type="button" class="layui-btn layui-btn-normal uploadListBtn">
+      <i class="layui-icon  layui-icon-upload"></i>
+      选择文件
+    </button>
+
+    <div class="layui-upload-list">
+      <!-- 用一个表格展示上传的文件名字、状态、操作 -->
+      <table class="layui-table">
+        <!-- 表格的标题 -->
+        <thead>
+          <tr>
+            <th>文件名</th>
+            <th>大小</th>
+            <th>状态</th>
+            <th>预览</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <!-- 表格的内容 -->
+        <tbody id="uploadTableList"></tbody>
+      </table>
+      <!-- 用一个表格展示上传的文件名字、状态、操作 -->
+
+    </div>
+    <!-- 进行上传的按钮 -->
+    <button type="button" class="layui-btn" id="uploadListAction">
+      <i class="layui-icon  layui-icon-upload-circle"></i>
+      开始上传
+    </button>
+  </div>
+
+  <script>
+    layui.use('upload', function () {
+      var $ = layui.jquery
+        , upload = layui.upload;
+
+      // 表格内容的dom容器id
+      var uploadTableListView = $('#uploadTableList')
+      // 渲染上传的接口
+      var uploadListIns = upload.render({
+        //指向容器选择器,一般是个上传按钮
+        // !通过样式进行指定，这样拥有这个样式的按钮点击后都会调用这个上传接口了，可以做成多个按钮分在不同位置
+        elem: '.uploadListBtn'
+        , url: '#' //改成您自己的上传接口
+        , accept: 'file' //允许上传的文件类型  可选值有：file（所有文件）、images（图片）、video（视频）、audio（音频）
+        /*
+        允许上传的文件后缀。一般结合 accept 参数类设定。
+        假设 accept 为 file 类型时，那么你设置 exts: 'zip|rar|7z' 即代表只允许上传压缩格式的文件。
+        如果 accept 未设定，那么限制的就是图片的文件格式
+        eg:jpg|png|gif|bmp|jpeg    zip|rar|7z   pdf|doc|excel|csv
+        */
+        // , exts: 'zip|rar|7z'
+        // , size: 1000 //限制文件大小，单位 KB
+        // , drag: false //关闭拖拽上传，默认是开启的，只要把文件拉到elem绑定的按钮上就上传了
+        , multiple: true //是否允许多文件上传。设置 true即可开启
+        , auto: false //选择文件后不自动上传  默认为true，若设置为false则需要配合设置 bindAction 参数来指向一个其它按钮提交上传
+        , bindAction: '#uploadListAction' //指向一个按钮触发上传
+        //选择文件后，还未上传时的回调函数
+        , choose: function (obj) {
+          var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+
+          //读取本地文件
+          obj.preview(function (index, file, result) {
+
+            var tr = $(['<tr id="upload-' + index + '">'
+              , '<td>' + file.name + '</td>'
+              , '<td>' + (file.size / 1024).toFixed(1) + 'kb</td>'
+              , '<td>等待上传</td>'
+              , '<td> <div id="upImgView' + index + '"></div></td>'
+              , '<td>'
+              , '<button class="layui-btn layui-btn-xs demo-reload layui-hide">单个重新上传</button>'
+              , '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+              , '</td>'
+              , '</tr>'].join(''));
+
+            //预读本地文件,不支持ie8
+            tr.find(`#upImgView${index}`).append('<img src="' + result + '"  class="layui-upload-img">')
+
+            //单个重传
+            tr.find('.demo-reload').on('click', function () {
+              obj.upload(index, file);
+            });
+
+            //删除
+            tr.find('.demo-delete').on('click', function () {
+              delete files[index]; //删除对应的文件
+              tr.remove();
+              uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+            });
+            // 向前端页面的的dom容器中插入表格内容
+            uploadTableListView.append(tr);
+          });
+        }
+        // 上传完成后的回调函数
+        , done: function (res, index, upload) {
+          if (res.files.file) { //上传成功
+            var tr = uploadTableListView.find('tr#upload-' + index)
+              , tds = tr.children();
+            //  tds.eq(2)---》状态    tds.eq(3)---》操作
+            tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+            tds.eq(3).html(''); //清空操作栏
+            return delete this.files[index]; //删除文件队列已经上传成功的文件，防止重复上传
+          }
+          this.error(index, upload);
+        }
+        // 上传失败的回调函数
+        , error: function (index, upload) {
+          var tr = uploadTableListView.find('tr#upload-' + index)
+            , tds = tr.children();
+          tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+          tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示单个重传按钮
+        }
+      });
+
+
+
+    });
+  </script>
+</body>
+
+</html>
