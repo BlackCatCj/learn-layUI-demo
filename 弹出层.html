@@ -123,6 +123,13 @@
     //
     // });
 
+// // loading type:3
+//     layer.open({
+//         type: 3,
+//         // 这样的写法，会给整个页面一个遮罩层，然后在指定的id的dom处弹出tips
+//         shade: 0.01,
+//         time: 0
+//       });
 
     // =======================tips指向性弹出层================================
     /*
@@ -182,7 +189,8 @@
   </script>
 
   <script>
-      // layui.use("layer", function () {
+    layui.use("layer", function () {
+
 
       //   // 弹出层的最下方的按钮
 
@@ -230,7 +238,7 @@
 
       //   });
 
-      // });
+    });
   </script>
 
   <script>
@@ -416,7 +424,7 @@
       // layer.close(index);
       // });
       // // 加载层，可以传入0-2
-      // layer.load(2); //加载的转圈圈样式，会一直在，用于提价的时候
+      // layer.load(2); //加载的转圈圈样式，会一直在，用于提交的时候
       // var index = layer.load(0);
       // layer.close(index); 用于关闭load
       // var index = layer.load(0, { time: 3 * 1000 }); //加载风格2 且设定最长等待3秒后自动关闭加载图标
